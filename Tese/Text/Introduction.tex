@@ -1,0 +1,167 @@
+\chapter{\textbf{Introduction}}  \label{introduction}
+
+This section will provide a brief introductory note regarding the dissertation. The motivation behind selecting this theme, the exposition of the problem's description, and the main objectives will be covered in this section as a review of the existing literature on this subject.
+
+\section{Motivation}
+\subsection{Artificial Intelligence in the Medical Field}
+The constant technological development that the world has been undergoing in the last few years has affected, in some way, every aspect of our lives. 
+Science has been evolving fast, and the field of medicine is no different. Due to its high impact on people's lives, developing better medical technologies has always been a focus. When it comes to \ac{ai} and \ac{ml}, the potential opportunities and applications are groundbreaking  \citep{MLinmed}.
+
+\ac{ml} has been capturing the interest of medical researchers and practitioners in predictive methods within health science and medicine. The number of articles, publications, and overall practical applications in this area has exponentially grown in the last ten years \citep{MLmedlab}.
+
+In clinical laboratory medicine, it is also expected that \ac{ml} methods will become more extensively used since the laboratory is the leading supplier of quantitative, structured, and codified data \citep{MLmedlab}. 
+
+The advancements in technology that have been occurring in laboratories have made it possible to incorporate expert system capabilities and software applications, such as autoanalysers and modules of laboratory information systems. Furthermore, incorporating \ac{ml} methods in medical laboratories should be supported as they can lead to better laboratory organisation and expand laboratory professionals' core skills on a more significant path to change and innovation \citep{MLmedlab}.
+
+There are multiple examples of the possible applications of \ac{ml} for data from medical laboratories. \ac{ml} has been studied for the prediction of diagnosis, risk factors, outcomes, survival prognosis \citep{leukemiadiagnosis, hepatocarcinoma-staging}, for cancer screening \citep{tumour-marker, MLlab2, chemoter, prediction-crc}, and also for the study of the potential tumour and genetic markers \citep{cancerprogpred}, as well as pharmacological targets \citep{drugtarget}.
+
+\ac{dl} has also been studied and applied in different areas of medicine. The most common and first applied areas were in radiology \citep{dlradiology}, and later also in microscopy histologic images \citep{dlhistology}. 
+
+As for \ac{dl} in laboratory medicine, \ac{dl} is, nowadays, a very explored tool in several studies on proteomics \citep{dlproteomics}, genomics \citep{dlgenomics}, and image classification of, for example, blood cells in hematology \citep{DLbloodcells}.
+
+Microbiology, as a branch of laboratory medicine, is devoted to analysing samples through various tests to identify and characterise the causal agents responsible for infectious diseases.
+
+Extensive research has been dedicated to exploring the integration of \ac{dl} within microbiology. \cite{micro-ai} have conducted a review of potential applications of \ac{ai} in the microbiology setting, emphasising its significant role as a powerful tool for the future of this area. The authors allude to several approaches, such as the classification of chromogenic media, the automated microscopic detection of mycobacteria in sputum samples, and the automated detection of malaria parasites in blood smears.
+Moreover, there is a notable current trend in investigation in exploring the application of \ac{dl} to study genomic information sourced from isolated bacteria, analyse metagenomic microbial findings from primary specimens, and interpret mass spectra acquired from cultured bacterial isolates \citep{micro-ai}.
+
+Regarding the domain of computer vision within this field, numerous instances also exist.
+\cite{hemolysis-counting} applied \ac{cnn} for a quantitative approach, to count bacterial colonies. 
+
+\cite{MicroscopyBactDL} and \cite{microscopy-dl-approach} proposed an approach employing \ac{cnn} for the categorisation of bacteria into distinct classes based on digital microscopy images.
+Another study by \cite{deepbacteriasegm} applied \ac{dl} techniques for bacterial classification. However, instead of microscopy images, their approach employed a collection of images derived from bacterial cultures grown on agar.
+
+\cite{hemolysis} have created a dataset encompassing various bacterial cultures and subsequently applied \ac{dl} techniques to classify and detect hemolysis, a phenomenon exhibited by certain bacteria when cultivated on blood agar cultures.
+
+\cite{agar} has developed an extensive dataset encompassing five distinct bacterial species and yeast. This dataset includes comprehensive photographic documentation and annotations of various bacterial culture plates. The authors then proposed the application of \ac{dl} for bacteria and yeast classification. Additionally, they developed a framework for microbial objects counting \citep{agardensitymap}. They extended the application of \ac{dl} in generating synthetic datasets of microbiological images of Petri dishes, which add value for training \ac{dl} models \citep{agarsynthetic}.
+
+An alternative approach by \cite{parasites}  involved utilising \ac{cnn} in digital microscopy for intestinal parasites. In summary, the researchers developed a model trained to identify the absence of intestinal parasites on slides, concurrently highlighting suspected parasites for subsequent manual verification.
+
+Some of these articles and applications will be reviewed further in the document within the Literature Review section.
+
+\subsection{Automation in Microbiology Laboratories}
+Numerous tasks within the microbiology laboratory routine are still performed manually. This is particularly evident when comparing it with the areas of hematology or clinical chemistry. In the latter, automation systems have progressively evolved and gained widespread acceptance, becoming a big part of the daily operational routine \citep{2021auto_micro, 1auto_micro, 2auto_micro, 3auto_micro}. 
+
+In summary, a standard day within a medical microbiology laboratory involves various tasks, from processing samples and the maintenance of cultures to staining procedures, microorganism identification, and antimicrobial tests. While the specific techniques applied may vary depending on the laboratory, the general workflow is similar.
+
+The first step always involves the reception and recording of the sent samples. These samples can be blood, urine, or other bodily fluids specimens obtained from patients. 
+It is important to note that the context being discussed pertains to a medical laboratory specialising in analysing bodily fluids, which could be affiliated with a hospital or may receive samples from diverse centers. It is worth highlighting that microbiological testing extends its scope to numerous other domains, including assessments of water quality, food safety, and industrial applications, which may have different routines and techniques.
+
+Subsequently, samples are prepared for analysis. Different preparation methods are applied based on protocols according to the specific type of sample being examined.
+
+Most of the samples are inoculated onto culture plates containing growth media for analysis. Given that these plates will require an incubation period of at least 12 hours after inoculation, which may extend beyond 24 hours in certain instances, carrying out this step at an early stage is imperative.
+
+Culture media, or growth media, can exist in solid, liquid, or semi-solid forms and are designed to support the growth of microorganism populations.
+There are different cultural media types, the most common being nutrient broths or agar plates. These culture media all share a common property: providing a nutrient-rich environment that fosters the growth of microorganisms. What makes them different is an array of compositions and properties that confer selective and/or differential attributes.
+The sample's origin determines the choice of culture media. For instance, respiratory samples are typically subjected to more selective media, as the respiratory tract harbours diverse normal flora present in a healthy individual, becoming pivotal to cultivating solely those microorganisms most likely to be pathogens. Conversely, blood samples, characterised by their physiological sterility, are often cultivated in richer and broader media.
+
+
+Following these stages, various steps within the daily routine demand significant manual involvement, occurring concurrently or sequentially. These encompass tasks like preparing samples for microscopic assessment and the subsequent microscopic visualisation. Furthermore, the process entails microorganism identification and antimicrobial susceptibility testing, which often involves a range of techniques and may require additional manual inoculation and subsequent rounds of incubation. Ultimately, the conclusive interpretation of all outcomes involves validation, antibiotic selection, and the communication of findings to the medical professional responsible for overseeing the care of the respective patient.
+
+Considering the central theme of this dissertation, it becomes imperative to delve deeper into the steps involving culture media. This elaboration serves a dual purpose: it accentuates the motivation underlying the addressed problem and clarifies the primary objective.
+
+Inoculating and incubating microorganisms on culture plates constitutes a crucial component of microbiology routines. However, it is a process that demands considerable time to be executed meticulously. 
+The primary objective behind incubation is to foster the growth of bacteria into discernible colonies on the plates, which serves as the foundation for subsequent analysis.
+
+To provide an illustrative example, let us consider again a blood sample. A blood sample from a healthy individual is a sterile specimen, meaning that no microorganisms are expected to proliferate on the plate. However, when patients have bloodstream infections, it is expected that colony growth on the plates is manifested. This phenomenon is significant because it confirms the presence of microorganisms in the individual's blood and because these colonies play a crucial role in providing a deeper investigation.
+
+At an initial stage, professionals can obtain valuable and rapid insight from the macroscopic characteristics of the colonies. Observations regarding their shape, size, and texture can often provide information about the group of bacteria present. Moreover, certain tests can be promptly conducted, offering supplementary information in emergencies.
+
+Furthermore, these colonies serve as the foundation for more advanced procedures. Specialised equipment can be utilised to identify the microorganisms at a species level. Additionally, the colonies are instrumental in conducting antibiotic susceptibility testing. This assessment studies the susceptibilities and resistances of the bacteria to a range of antibiotics, providing a comprehensive understanding of the patient's infection and enabling a more suitable therapeutic approach \citep{hemolysis}.
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+The daily routine is thus highly manual-intensive to laboratory professionals, further compounded by its time-intensive nature. Completion of medical reports typically takes at least one to two days. This temporal delay can adversely affect the patient's health as initiating effective antimicrobial therapies gets postponed. Consequently, relying on broader-spectrum and empirical therapies is often necessary, resulting in extended treatment duration that can sometimes be inefficient until microbiological results are finalised.
+
+This situation also presents drawbacks in terms of operational efficiency, costs, storage capacity, and processing times within the laboratory setting.
+
+While automated systems for microbiology do exist, they have yet to be widely adopted. Implementing automation in this field can be challenging due to the heterogeneous range of sample types, diversity of specimen processing techniques, and cost-related considerations that laboratories need to factor in, among other factors \citep{2021auto_micro}.
+
+Some examples of existing automated systems are inoculation units, robotic incubators, digital photography modules, and post-imaging analysis workstations \citep{2021auto_micro}.
+The full automation of laboratory processes in microbiology has only recently been recognised as a valuable tool, but research is showing its potential benefits. Automation can lead to greater standardisation, improved laboratory efficiency, enhanced workplace safety, and long-term cost savings \citep{2021auto_micro}.
+
+In summary, the primary motivation for this dissertation is to address the need for automation and enhanced efficiency in clinical microbiology laboratories. By leveraging the power of \ac{ai}, this research focuses on applying \ac{dl} models for classifying microbial colonies grown on agar cultures.
+
+
+\section{Problem Description}
+With the growing exploration and demand for automation in clinical microbiology laboratories, the development of automated microbiological sample analysis based on \ac{ai} is of great interest.
+
+%%%%%%%%%%%%%%%%
+
+The evolution of automated image analysis technologies for the detection and/or classification of microbial colonies would, therefore, tackle a time-consuming and error-prone process within the microbiology routine. In great contrast to the manual procedure outlined in the preceding section, one illustrative application of these technologies involves the utilisation of incubators equipped to capture photographs of culture media plates while they reside within the incubator. Subsequently, automated image analysis algorithms can execute computer-assisted culture interpretation, enabling the successful identification and reporting of plates exhibiting none or minimal growth, the recognition of colonies, or even efficiently identifying the microorganisms  \citep{2021auto_micro}. 
+
+This approach would bring many advantages regarding the working routine, considering the high number of plates manually analysed every single day, since many of them sometimes even require a new inoculation and incubation process, thus delaying the report for more hours. 
+Combining an automated incubator that takes photographs of the plates at predefined intervals applying the \ac{dl} models would bring diverse potential benefits. The models could quickly detect the emergence of colonies in their early stages, identify sterile plates, and categorise plates as either containing colonies from only one species (indicating a high likelihood of it being the infecting pathogen) or mixed species colonies (suggesting contamination and necessitating a fresh sample). Besides, the model could classify the types of colonies, triggering alerts to medical professionals about specific species and delivering many other valuable insights. \newline
+
+%%%%%%%%%%%%%%
+
+With this, the primary objectives of this dissertation are:
+
+\begin{itemize}
+    \item Train and evaluate object detection models for microbial colony detection on a publicly available dataset and on a curated dataset
+    %\begin{itemize}
+    %    \item Training and fine-tuning different models on a publicly available dataset and on a curated dataset of microbial colonies 
+    
+   % \end{itemize}
+
+    \item Curate a new dataset with annotated images of agar plates with a diverse set of culture media
+   % \begin{itemize}
+    %    \item Creation and further training and fine-tuning of a brand new dataset
+    
+   % \end{itemize}
+
+    \item Assess the generalization and robustness of deep learning models with transfer learning
+   % \begin{itemize}
+    %    \item Analyse how transfer learning affects performance on lower performing subsets and asses gener
+   % \end{itemize}
+    
+    \item Implement ensemble learning for enhanced microbial colony detection
+  %  \begin{itemize}
+   %     \item Evaluating the ensemble method's influence on improving detection accuracy and mitigating potential shortcomings of individual models
+   % \end{itemize}
+    
+    
+\end{itemize}
+
+%The \textbf{secondary objectives} are:
+
+
+
+%    \item Discuss the Real-World Applicability of Deep Learning Models in Microbiology Laboratories
+%    \begin{itemize}
+%        \item Discussing the potential reduction in manual labour, time savings, and enhanced efficiency resulting from the deployment of automated detection systems;
+%        \item Highlighting any challenges, limitations, or considerations that might arise when transitioning from research settings to real-world applications.
+%    \end{itemize}
+%\end{itemize}
+
+
+
+
+By conducting this research, a significant contribution is aimed to be made to the progression of \ac{dl} applications in the field of microbiology, paving the way towards 
+automated analysis and improvement of the efficiency within clinical laboratories. 
+
+Ultimately, this work becomes an integral part of the potential transformation in the paradigm concerning the analysis of microbial cultures. By enabling faster and more accurate diagnoses, this project is set to contribute to developing technology that will substantially improve the healthcare system.
+Importantly, this progression is driven by the overwhelming aim of improving patient care outcomes, underlining the continuing focus of health and technological advancements on benefiting those who matter most – the patients.
+
+
+
+
+
+
+
+
+
+
+
+
+

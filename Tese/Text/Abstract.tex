@@ -1,0 +1,27 @@
+\chapter*{Abstract}
+
+
+
+%%%%%%%%%%%%%%%%%
+
+
+Automation has become important in medical laboratories, especially in clinical chemistry and hematology. However, microbiology laboratories still heavily rely on manual processes. One particularly time-consuming step in microbiology labs is the culture of samples on agar plates, followed by their manual review for microorganism identification and antibiotic profile analysis. This dissertation addresses this issue by employing deep-learning methods for detecting microbial colonies.
+
+
+Divided into two parts, the first part of this dissertation focuses on training and enhancing the accuracy of four models using the Annotated Germs for Automated Recognition (AGAR) dataset. The models include Faster R-CNN and RetinaNet with two backbones (ResNet 50 and ResNet 101). Transfer learning and ensemble methods are employed for performance improvement.
+
+
+The second part involves creating a new dataset with 165 images of agar plates with colonies of \textit{S. aureus}, \textit{P. aeruginosa}, and \textit{E. coli} on various types of culture media. The same models are trained on this dataset, and similar techniques are applied to improve performance. Transfer learning is tested using the weights from the models trained on the AGAR dataset.
+
+
+
+The initial training achieves a mean Average Precision (mAP) of 62~\% on the AGAR dataset, with Faster R-CNN ResNet 101 delivering the best performance. A value of 66.40~\% is achieved with the application of the ensemble method -- Weight Boxes Fusion, surpassing the results from the creators of the AGAR dataset.
+On the new dataset, RetinaNet ResNet 50 achieves a value of 52.40~\%, improved to 56.30~\% using an ensemble of the results.
+
+
+
+In summary, this dissertation successfully enhances the performance of the AGAR dataset, introduces a new dataset, and employs various techniques to improve performance. It represents a significant step forward in applying deep learning methods to laboratory medicine.
+
+
+\noindent
+{\bf Keywords:} Microbiology; Deep Learning; Object Detection; Bacterial Colonies.

@@ -1,0 +1,437 @@
+\chapter{\textbf{Methodology}}  \label{methods}
+
+This chapter delineates the methodologies adopted for this project, providing an exposition on data description, training workflow, and the chosen ensemble method. Additionally, it offers insight into the rationale behind incorporating transfer learning and the metrics employed for evaluation.
+
+
+
+%To achieve this goal, a comprehensive dataset called \ac{agar}, published by \cite{agar} dedicated to advancing deep learning in microbiology, is utilized. The \ac{agar} dataset is a valuable resource for training and evaluating \ac{dl} models in microbiology.
+
+The dissertation is divided into two parts. \newline
+
+\noindent \textbf{Part 1: Training on the AGAR Dataset}
+
+In this part, the primary aim is to comprehensively assess accuracy across each background type within the dataset and implement transfer learning and ensemble methods to enhance accuracy. \newline
+
+
+\noindent \textbf{Part 2: Training on the curated dataset}
+
+In the second segment, a dataset was curated by capturing photographs of real plates within the laboratory setting. While the bacterial species remained consistent with those utilized in the first phase, there was a variation in the culture media of the plates on which they were inoculated. Initially, a foundational training process establishes a baseline accuracy level. Subsequently, to enhance performance, transfer learning was applied to leverage the insights gained from the models trained on the \ac{agar} dataset, and ensemble methods were implemented. \newline
+
+This project is focused on answering some key questions, such as:
+
+\begin{itemize}
+    \item Which models are better suited for this task?
+    \item How do different background types influence the performance of the models on the \ac{agar} dataset?
+    \item Are there variations in model performance across different bacterial species within both datasets?
+    \item What is the impact of transfer learning on model performance?
+    \item How does the generalization process, where AGAR dataset weights are applied using transfer learning, affect the training of the curated dataset?
+    \item Which combination of models in the ensemble method produces the best results in both datasets?
+\end{itemize}
+
+
+
+\newpage
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Data Description}
+
+\subsection{AGAR dataset}
+
+
+The first part of this project was developed upon the \ac{agar} dataset that was provided by \cite{agar}. The authors' main objective for creating this dataset was to have a diverse dataset upon which the broader research community could build and advance the field of neural networks in microbiology. 
+The \ac{agar} dataset comprises 18 thousand annotated photographs of Petri dishes, with over 330 thousand labelled microbial colonies. It includes colonies belonging to four different bacterial species (\emph{Staphylococcus aureus}, \emph{Bacillus subtilis}, \emph{Pseudomonas aeruginosa}, \emph{Escherichia coli}), alongside one yeast strain (\emph{Candida albicans}) \citep{agar}.
+%After the selection of the microorganisms, dilution, inoculation on general-purpose and non-selective growth media, and incubation for around 24 hours, the images of the plates were taken. 
+These photographs are categorized into two major groups: high-resolution and low-resolution images. The first group is further divided into three subgroups based on lightning conditions: bright, dark, and vague. The distinction between these subgroups is derived from the colour of the plexiglass employed: white for the bright and black for the dark subgroups. The vague subgroup was exposed to ambient lighting, giving away to low-contrast images \citep{agar}.
+Figure \ref{fig:agar_backgrounds} illustrates the various background settings for this dataset.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\linewidth]{images/agarexemplos.png}
+    \caption{Background settings: a) Bright, b) Dark, c) Vague, d) Low Resolution}
+    \label{fig:agar_backgrounds}
+\end{figure}
+
+
+%After this, annotations on the classification of the colonies for each image were done by professionals \citep{agar}. 
+%The bright and dark setups were made with the whole setup closed in a box to eliminate the influence of ambient light. 
+
+The dataset comprises images featuring countable colonies, images depicting empty plates, and images showcasing uncountable colonies, where the enumeration of individual colonies is unfeasible.
+
+%and that have countable colonies and plates with so many uncountable colonies. At a certain number of colonies, it becomes impossible for one to distinguish them as they start to form a mesh. So, this group of plates has a qualitative value for the counting. In practice, when there are a high number of colonies, higher than 100, depending on the situation, the precise number of colonies is unnecessary, as it does not have a clinical significance. In this case, the important information is if the colonies are all similar, from the same microorganism, or if there is a mix of organisms. When the first case occurs, the quantification is given as an order of magnitude.  
+
+Figure \ref{fig:agar_dist} illustrates the distribution of empty, countable, and uncountable plates across various background types and species-specific annotation counts. These graphs are taken from \cite{agar}.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\linewidth]{images/agar.png}
+    \caption{Samples distribution in the original dataset: (a) across different microbial species, and (b) among different acquisition setup subgroups.}
+    \label{fig:agar_dist}
+\end{figure}
+
+%The combination of bright and dark subgroup samples constitutes about half of the dataset. It includes photos of the best quality in contrast between grown microorganisms and agar surface.
+%As seen in the histogram, the categories \textit{S for each subgroup. aureus}, \textit{P. aeruginosa} and \textit{E. coli} are overall the more balanced categories. When looking at \textit{B. subtilis}, it is visible that it is most under-represented in all subgroups, being even absent in the "vague" subgroup. \textit{C. albicans} is also not so well balanced and is also absent in the "vague" subgroup. 
+
+For this project, only images containing colonies of \textit{S. aureus}, \textit{P. aeruginosa}, and \textit{E. coli} were utilized. 
+This selection was primarily driven by the greater balance observed across the dataset within these categories but also due to the higher clinical significance those three bacteria represent as prevalent pathogenic agents in human infections. Consequently, from the complete dataset, images that featured annotations of \textit{B. subtilis}, \textit{C. albicans}, "Contamination," or "Defect" were excluded. Furthermore, images containing uncountable colonies were also removed, as well as images that contained more than 100 annotations, for simplification. \newline
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=0.7\linewidth]{images/back_perc.png}
+    \caption{distribution of the dataset according to the background type.}
+    \label{fig:dist_background}
+\end{figure}
+
+
+
+
+With all this, the resultant dataset employed in the project comprises a total of 9851 images, 182864 annotations, and three categories (\textit{S. aureus}, \textit{P. aeruginosa} and \textit{E. coli}). 
+
+Out of these, 1217 images featured empty plates, while the remaining images included annotations spanning the three categories. Each image had the potential to encompass one or more of these categories. The distribution of empty and countable plates is illustrated in the Appendix, in Figure \ref{fig:count_empty}.
+
+
+
+Approximately 62~\% of the dataset comprised high-resolution images, predominantly concentrated within the dark background category. This distribution is visually presented in more detail in Figure \ref{fig:dist_background}.
+
+%When referring to the type of background, 8,2~\% belong to the Bright Background, 45,3~\% have Dark Background, and 8,8~\% are from the Vague Background. These three groups contain high-resolution images and make up 62,3~\% of the dataset. The rest 37,7~\% are low-resolution images. This distribution is represented in Figure \ref{fig:dist_background}. Figure \ref{fig:count_empty} reflects the distribution of images containing colonies, annotations, and empty images.
+
+
+
+
+
+%\begin{figure}[!ht]
+%    \centering
+%    \includegraphics[width=\linewidth]{images/count_empty.png}
+%    \caption{distribution of countable and empty images on the whole dataset and within each Background group.}
+%    \label{fig:count_empty}
+%\end{figure}
+
+
+The relative frequency of each class across the entire dataset and within each background subgroup was computed, illustrated in Figures \ref{fig:hists_total} and \ref{fig:hists_back}, respectively.
+The entire dataset is relatively well-balanced. Class \textit{P. aeruginosa} makes up the fewest annotations, accounting for approximately 27~\% of the total.
+Within each subgroup, dark background images display the highest degree of balance. Conversely, the most imbalanced subgroup is the vague background. 
+The distribution of class instances is relatively consistent, except for the vague background subgroup, where pronounced discrepancies are observed.
+
+ 
+Finally, concerning the distribution of classes and annotations, Figures \ref{fig:annotationsperimage} and \ref{fig:class_anns} graphically depict the number of images based on the number of annotations they contain for the entire dataset and across each subgroup. The majority of images contain twenty annotations or less, while only a few have more than fifty annotations.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.7\textwidth]{images/histstotal.png}
+    \caption{Distribution of classes across the entire dataset.}
+    \label{fig:hists_total}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{images/hists2.png}
+    \caption{Distribution of classes within each background.}
+    \label{fig:hists_back}
+\end{figure}
+
+
+
+
+
+
+
+%\begin{figure}[!ht]
+%    \centering
+%    \includegraphics[height=20cm,width=.7\textwidth]{images/anns100_new.png}
+%    \caption{Distribution of Annotations per Image: number of images based on their annotations for the entire dataset and across each subgroup.} 
+%    \label{fig:annotationsperimage}
+%\end{figure}
+
+%\begin{figure}[!ht]
+%    \centering
+%    \includegraphics[height=15cm,width=.7\textwidth]{images/ann_class_new.png}
+%    \caption{Distribution of Annotations per Image for Each Annotation Class: number of images based on the number of annotations they contain for each class of annotations.}
+%    \label{fig:class_anns}
+%\end{figure}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\newpage
+
+\subsection{New dataset}
+
+The second segment of the dissertation started with creating a compact dataset of annotated images by utilizing colonies inoculated on laboratory plates. In order to sustain the continuity of the classification task, the bacterial species inoculated remained consistent with those addressed in the first part, namely \textit{S. aureus}, \textit{P. aeruginosa}, and \textit{E. coli}. 
+Conversely, the plates employed for inoculation diverged from those utilized in the \ac{agar} dataset. The authors opted for plates containing \ac{tsa} culture media, a nutrient-rich but non-selective and non-differential medium. In this particular dataset, the decision was made to introduce greater diversity in culture media, involving four distinct types of agar: blood agar (Figure \ref{fig:culturemedia} a), and chocolate agar (Figure \ref{fig:culturemedia} b) (both enriched and non-selective), MacConkey agar (Figure \ref{fig:culturemedia} c) (a selective and differentiating medium that exclusively supports the growth of gram-negative bacterial species -- such as \textit{E. coli} and \textit{P. aeruginosa}), and Mannitol salt agar (Figure \ref{fig:culturemedia} d) (a selective and differential medium used to isolate and identify \textit{S. aureus}). The distribution of the type of culture media on the dataset is illustrated on Figure \ref{fig:newdata_culturemedia}.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\linewidth]{images/newexamples.PNG}
+    \caption{Different culture media: a) Blood agar, b) Chocolate agar, c) MacConkey agar, d) Mannitol salt agar.}
+    \label{fig:culturemedia}
+\end{figure}
+
+The various culture media exhibit distinct colours, and the bacteria react differently based on the specific medium in which they were inoculated. Furthermore, even within the same species, there can be slight variations in morphology due to the type of medium utilized.
+This introduces a layer of diversity and complexity, establishing a dataset to simulate a medical laboratory scenario more faithfully.
+
+
+Figures \ref{fig:aureus} to \ref{fig:pseudo} are dedicated to illustrating the different morphologic characteristics exhibited by colonies of different species when inoculated in diverse culture media. Notably, images a) within each figure pertains examples to the AGAR dataset, while the remaining images are from the new dataset.
+
+Colonies of \textit{S. aureus} are typically circular, smooth, raised, and exhibit a glistening appearance. When cultivated on Mannitol salt agar (Figure \ref{fig:aureus} c and d), they manifest an opaque texture and often display a golden-yellow pigmentation. Conversely, \ac{tsa} (a) and blood agar (b) are characterized by an opaque, greyish-to-yellow hue.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\linewidth]{images/aureus.PNG}
+    \caption{\textit{S. aureus} colonies: a) AGAR dataset, b) Blood agar, c) Mannitol salt agar, d) Mannitol salt agar.}
+    \label{fig:aureus}
+\end{figure}
+
+\textit{E. coli} colonies are large, circular, and possess a grey appearance on \ac{tsa}, blood, and chocolate agar (Figure \ref{fig:ecoli} a, c, and d). When cultivated on MacConkey agar (b), they acquire a pink colour due to lactose fermentation.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\linewidth]{images/ecoli.PNG}
+    \caption{\textit{E. coli} colonies: a) AGAR dataset, b) MacConkey agar, c) Chocolate agar, d) Blood agar.}
+    \label{fig:ecoli}
+\end{figure}
+
+
+\textit{P. aeruginosa} colonies are larger in size, circular, flat, and have irregular margins. On blood and chocolate agar (Figure \ref{fig:pseudo} b and d), they showcase a greyish pigmentation, whereas on \ac{tsa} (a), they appear paler. In the case of MacConkey agar (c), the colonies are colourless, as they do not undergo lactose fermentation, unlike \textit{E. coli}.
+
+
+
+
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\linewidth]{images/pseudo.PNG}
+    \caption{\textit{P. aeruginosa} colonies: a) AGAR dataset, b) Blood agar, c) MacConkey agar, d) Chocolate agar.}
+    \label{fig:pseudo}
+\end{figure}
+
+
+
+To the extent of our awareness, this constitutes the first dataset for a deep learning project that incorporates such a broad spectrum of culture media diversity. %\newline
+
+The dataset was generated through the capture of photographs using an iPhone 13 mini. These images were obtained under consistent lighting conditions, although without specialized equipment for light control. Given the variation in transparency across different media, photographs of those media were primarily taken against a dark background.
+The images were cropped so that only the plates were visible, after which they were uploaded and annotated using the Roboflow app.
+
+The dataset is thus composed of 165 images and 1801 annotations. The distribution of the classes is illustrated in Figure \ref{fig:newdata_class}.
+Among these are four images featuring empty plates, while other images encompass a mixture of multiple species within a single plate.
+Figure \ref{fig:newdata_culturemedia} depicts the distribution of distinct culture media types. Notably, the least represented is the Mannitol media. This occurrence can be attributed to the specificity of this media for a single species, \textit{S. aureus}, while the other media can support the growth of multiple species.
+In this case, most of the images contain twenty or fewer annotations. The image with the highest number of annotations contains 42 annotations, as depicted in Figures \ref{fig:newdata_anns} and \ref{fig:newdata_classanns}.
+
+%In contrast to the first part, training is conducted solely on the complete dataset rather than being performed for each distinct media type. This decision is primarily driven by the limited quantity of images within the new dataset, as well as the specialized nature of the media. The latter factor would lead to variations in the number of categories for each classification task.
+
+
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.7\linewidth]{images/newdata_distrib.png}
+    \caption{Class distribution on the new dataset.}
+    \label{fig:newdata_class}
+\end{figure}
+
+%\begin{figure}[!ht]
+%    \centering
+%    \includegraphics[width=0.7\linewidth]{images/culturemedia.png}
+%    \caption{Distribution of culture media.}
+%    \label{fig:newdata_culturemedia}
+%\end{figure}
+
+%\begin{figure}[!ht]
+%    \centering
+%    \includegraphics[width=0.7\linewidth]{images/newdata_anns.png}
+%    \caption{Distribution of Annotations per Image: number of images based on the number of annotations they contain for the new dataset.}
+%    \label{fig:newdata_anns}
+%\end{figure}
+
+%\begin{figure}[!ht]
+%    \centering
+%    \includegraphics[height=12cm,width=0.7\linewidth]{images/newdata_classanns.png}
+%    \caption{Distribution of Annotations per Image for Each Annotation Class: number of images based on the number of annotations they contain for each class of annotations.}
+%    \label{fig:newdata_classanns}
+%\end{figure}
+
+
+
+
+
+
+
+
+
+\newpage
+
+\section{Training Workflow}
+
+The workflow was executed on Google Colab Pro, using a GPU T4 provided by the service. The training of models was accomplished using the Detectron2 framework \citep{detectron2}, an open-source library developed by Facebook AI Research for tasks related to object detection with bounding boxes, instance segmentation masks, and human pose prediction. This framework is implemented using PyTorch and provides a range of models, including Faster R-CNN, Mask R-CNN, RetinaNet, Cascade R-CNN, Panoptic FPN, and TensorMask.
+
+As previously mentioned, the \ac{agar} dataset was divided based on the background categories, resulting in four distinct subsets that underwent separate training: bright, vague, dark, and low-resolution subsets. Furthermore, the complete dataset was also subjected to comprehensive training.
+
+For the second part, training is conducted solely on the complete dataset rather than being performed for each distinct media type. This decision is primarily driven by the limited quantity of images within the new dataset, as well as the specialized nature of the media. The latter factor would lead to variations in the number of categories for each classification task.
+
+Each dataset was divided into three subsets for training (60~\%), validation (20~\%), and testing (20~\%). The first two sets played a role during the learning phase, serving for training and per-epoch evaluation, including validation loss computation. 
+At the end of each training cycle, the training and validation losses and the \ac{map} of the validation set were plotted. This aimed to help visualize the training process's progress and identify potential overfitting instances. The test set was left unseen by the model during the learning process, only to be employed for evaluation subsequent to the completion of the training.
+
+For the \ac{agar} dataset, the models underwent training for 10 epochs, in batches of 8 images. The new dataset underwent training cycles of 100 epochs due to the low number of images. Augmentations, such as random rotation, adjustments to brightness and exposure, blurring, and introducing noise, were applied to the images. The training process was also performed on the original dataset, which remained unaltered by any augmentation techniques.
+Regarding the optimizer, the training process employed the Stochastic Gradient Descent optimizer with a momentum of 0.9. The initial learning rate was set at 0.0005, with the first epoch devoted to a linear warm-up factor. Subsequently, after every three epochs, the learning rate was reduced by 1/10.
+
+
+Two object detection models were selected for this project: the two-stage Faster R-CNN and the single-stage RetinaNet. Each model was then trained utilizing two underlying architectures: ResNet50 and ResNet101. For the initialization of the models, pre-trained weights from ImageNet were utilized, a common approach within the field.
+
+
+
+
+\section{Evaluation Metrics}
+
+
+%For the first problem, the aim is to evaluate how well the models can predict the bacterial colonies' position and category between three different classes \textit{S. aureus}, \textit{P. aeruginosa} and \textit{E. coli}. The \ac{map} was measured and compared throughout the different models. 
+ 
+The metrics established for the \ac{coco} dataset in \cite{coco} were adopted for the classification task. Specifically, the \ac{map} was employed, with a focus on evaluating the \ac{map} across various \ac{iou} thresholds.
+
+
+%Furthermore, each model was evaluated several times with different probability score thresholds. The desired score threshold is a user-defined parameter for the evaluation process, and there are few references as to the best value to choose. The work by \cite{score-thresh} addresses this issue, demonstrating that lower thresholds result in large false positives, as expected, but still provide a good \ac{map}, showing that the most used evaluators for these tasks do not heavily penalize the existence of false positives. The authors concluded that the most adequate scores for the models we trained would be 0,5 or 0,75. Thus, those were the scores chosen for the evaluation process.
+
+
+The most common metric used in object detection tasks is the calculation of \ac{map}. To achieve this, defining a true positive for the task is essential. The object detection task differs from the classical image classification problem in that it takes the model to accurately predict the correct class and precisely identify the object's position.
+
+To assess the position and the class of a predicted bounding box, the \ac{iou} between the ground truth box and the predicted box is calculated. As the name suggests, the \ac{iou} represents the proportion of the area where both bounding boxes intersect relative to the total area of both boxes. This is calculated with the Jaccard similarity coefficient by the following formula:
+
+\[
+Jaccard Index = \frac{{|A \cap B|}}{{|A \cup B|}}
+\]
+
+A higher the \ac{iou} corresponds to a better prediction, meaning that a perfect prediction would result in an \ac{iou} of 100\%. 
+
+%\begin{figure}[!ht]
+%    \centering
+%    \includegraphics[width=0.7\linewidth]{images/iou.png}
+%    \caption{Intersection over Union.}
+%    \label{fig:iou}
+%\end{figure}
+
+
+%\begin{figure}[!ht]
+%    \centering
+%    \includegraphics[width=0.7\linewidth]{images/ious.png}
+%    \caption{Different Intersection over Union values.}
+%    \label{fig:ious}
+%\end{figure}
+
+%The convention for evaluating an object detection problem is that the user will define an \ac{iou} threshold above which the predicted box will be considered a true positive. For example, with a 50~\% \ac{iou} threshold, every predicted box that will share at least 50~\% of the area with the ground truth box will be considered as a correct prediction, and the boxes with an \ac{iou} lower than that will be negative. The higher the threshold, the more strict the evaluation will be, so only the predicted boxes very close to the ground truth will be considered positive.
+
+Subsequently, the localization problem is approached as a binary classification problem, where the positive class signifies the correct detection of the object. 
+With that, the precision and the recall are computed. The first measures the relevancy or correctness of the predicted items. It calculates the ratio of true positive and false positive predictions to the sum of true positive and false positive predictions. Precision answers the question: "Out of the items predicted as positive, how many are actually positive?". \newline
+
+\[ 
+Precision = \frac{Correct Predictions}{Total Predictions} = \frac{True Positives}{True Positives + False Positives}  
+\] \newline
+
+Conversely, recall assesses the completeness or coverage of the predicted items. It calculates the ratio of the true positive predictions to the sum of true positive and false negative predictions. Recall answers the question: "Out of all the positive items, how many were correctly identified?". \newline
+
+\[ 
+Recall = \frac{Correct Predictions}{Total Ground Truth} = \frac{True Positives}{True Positives + False Negatives} 
+\] \newline
+
+
+In a multi-class classification problem, the model assigns conditional probabilities to each class for a given bounding box. These probabilities represent the likelihood of the bounding box belonging to a specific class. The bounding box is classified accordingly by comparing these probabilities against a defined threshold. This implies that higher probabilities indicate a greater chance of the bounding box corresponding to that specific class.
+
+The following step consists of calculating the \ac{ap}, and its execution has varied among different authors. For this project, the \ac{coco} evaluator was adopted. 
+The \ac{coco} dataset employs a method to calculate the \ac{ap} in object detection by generating precision-recall curves for each category. This involves the variation of the confidence threshold of model predictions. It incorporates 101-point interpolation, where precision is calculated across 101 recall thresholds that range from 0 to 1 with increments of 0.01 \citep{coco}. In the equation below, \textit{p} denotes precision, and \textit{r} represents recall.   
+
+\[
+AP = \frac{1}{101} \sum_{\substack{r=0.0 \\ \text{step } 0.01}}^{1.0} p(r)
+\]
+
+\ac{ap} is computed individually for each class. Subsequently, \ac{map} is determined by averaging the \ac{ap} values across all the relevant classes. In the equation below, \ac{map} is calculated as the mean of the \ac{ap} values across all \textit{k} classes.
+
+\[
+mAP = \frac{1}{k} \sum_{i}^{1.0} APi
+\]
+
+The \ac{coco} dataset ultimately performs these calculations at different \ac{iou} thresholds, typically ranging from 0.5 to 0.95 with increments of 0.05. The final \ac{map} is then calculated as the mean of the \ac{map} values at different thresholds.
+
+The \ac{coco} \ac{map} is often used due to its capacity for the detailed assessment of models across different \ac{iou} thresholds, thus enabling a more fine-grained evaluation process \citep{coco_map}.
+
+\ac{mar} is also reported alongside \ac{map}, to simultaneously measure both proposal recall and localisation accuracy. \ac{mar} reflects the recall of each model for different \ac{iou} thresholds (from 0.5 to 1), summarising and rewarding both a high recall and a good localisation of the objects detected by the models \citep{mar}.
+
+
+
+
+
+
+
+
+
+\section{Transfer Learning}
+
+The reasoning behind transfer learning is using the overall knowledge acquired by a model trained on a larger dataset to enhance performance on a task with a smaller data fraction.
+
+In practice, the initial training procedure applied to this data and most object detection tasks is founded on the concept of transfer learning. 
+This implies starting the learning process with the weights of pre-trained models, which have been trained on datasets like the well-known ImageNet.
+Datasets like ImageNet are built upon millions of images. The models trained on these extensive datasets encompass thousands of diverse classes, requiring the models to make predictions across a large number of classes. Thus, the models are well trained to proficiently learn the feature extraction from photographs, allowing them to perform effectively on a given problem.
+
+Working with images of Petri dishes containing bacterial colonies in this project represents a highly specialized task. Consequently, exploring the feasibility of training the most compact and least performing subsets using the weights of a model initially trained on the complete dataset is of great interest. This approach, known as transfer learning, or fine-tuning, aims to optimize the network to improve performance.
+
+
+The rationale behind utilizing transfer learning as a fine-tuning approach in the first part of the project focused on the \ac{agar} dataset involved a sequence of steps. After the initial training, the models exhibiting the weakest performance or those belonging to subsets with fewer images were selected, along with the model with the highest performance. Subsequently, the weights from the latter model were employed to retrain the models with the poorest performance. Lastly, the retrained models were subjected to a subsequent round of evaluation.
+
+
+In the second part, the new dataset underwent an initial training phase, which was subsequently succeeded by a second training stage utilizing the weights derived from the top-performing model trained upon the \ac{agar} dataset. As the new dataset does not have subsets, it would not make sense to repeat the training performed on the same entire dataset. Therefore, in this part, the aim was to assess how the knowledge from models trained on a different dataset, specifically a larger scale dataset like \ac{agar}, would affect the results on the new dataset.
+
+\section{Ensemble of models}
+
+Ensemble techniques aim to enhance the performance of a single model by combining multiple algorithms. This combination can mitigate the bias or variance associated with a single model. Although most ensemble methods increase computational time during training or prediction, they provide an effective approach for advancing the state-of-the-art \citep{ensemble}.
+
+A range of ensemble methods is available, each offering distinct benefits.
+
+\begin{itemize}
+    \item One approach involves data transformations, such as creating sub-samples from the original dataset (bagging or bootstrap aggregating) or applying augmentations to the training data. 
+
+    \item Another method combines models through hyperparameter variations, such as modifying loss functions and optimizers. This approach also contributes to improved outcomes. These two techniques extend the training time while enhancing model performance.
+
+    \item Additionally, ensemble techniques can involve transforming and combining predictions. This can be achieved by merging predictions or introducing augmentations during testing. This, on the other hand, will consequently increase the prediction time rather than the training time.
+\end{itemize}
+
+
+Ensemble models, due to their nature, are widely used in applications in scenarios where real-time inference is not a primary concern. As a result, they serve as a favourable option for augmenting the performance of the models in this project.
+
+
+In this project, having trained multiple models and generated multiple predictions, the chosen approach involved ensemble techniques that focused on combining diverse predictions. 
+\ac{wbf} employs the confidence scores from all proposed bounding boxes to formulate average boxes \citep{ensemble_weightbox}. During this stage, a grid search procedure was executed to identify the optimal model combination and determine the most suitable parameters for the \ac{wbf} ensemble method.
+

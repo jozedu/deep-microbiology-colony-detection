@@ -1,0 +1,721 @@
+\chapter{\textbf{Results}}  \label{results}
+
+This chapter outlines the findings derived from evaluating the test sets of both datasets. It commences with assessing the performance of the foundational object detection models across various datasets, including subsets of the AGAR dataset. Subsequently, an analysis of the impact of transfer learning and \ac{wbf} ensemble method on model performance is conducted.
+
+
+
+The results are presented in terms of key metrics, including \ac{map}, \ac{mar}, and specific class detection \ac{map} values for \textit{S. aureus}, \textit{P. aeruginosa}, and \textit{E. coli}.
+
+\section{First part results}
+
+\subsection{Base models evaluation}
+
+
+
+The comprehensive results for the various subsets of the \ac{agar} dataset, as well as the dataset in its entirety, are presented in Tables \ref{tab:bright_results1} through \ref{tab:total_results1}.
+
+When assessed in terms of the \ac{map} metrics, the model that consistently outperforms others across different subsets and the entire dataset is Faster R-CNN with ResNet 101 architecture. Its performance spans from 51.09~\% to 62.39~\% \ac{map} across subsets, with the bright subset yielding the lowest \ac{map}, and the dark subset achieving the highest \ac{map}.
+
+On the other hand, RetinaNet models exhibit overall weaker performance. The architectural variations within the same model type generally yield minimal differences in performance. For instance, RetinaNet ResNet 50 performs better with the bright subset than RetinaNet ResNet 101, achieving \ac{map} values of 38.23~\% and 32.25~\%, respectively. In contrast, ResNet 101 performs slightly better within the low-resolution subset than RetinaNet ResNet 50 (55.53~\% versus 54.62~\%). These differences are, however, marginal.
+
+The \ac{mar} results closely mirror the \ac{map} findings, with slightly higher values.
+
+When analyzing the performance for each class, it becomes evident that the class with the most consistent and overall better results is \textit{E. coli}. Its performance ranges from a low \ac{map} value of 54.75~\% in the bright subset, using the RetinaNet ResNet 101 model, to a high \ac{map} of 71.18~\% in the low-resolution subset, where this subset consistently demonstrates the best performances.
+
+For the classification of \textit{P. aeruginosa} colonies, the models perform relatively poorly in the bright subset, with \ac{map} values ranging from 30.48~\% to 43.19~\%. Across the remaining subsets, the performance remains consistent within the different models, with the best result of 65.32~\% achieved in the low-resolution subset using the Faster R-CNN 101 model.
+
+The classification of \textit{S. aureus} colonies showcase a higher level of inconsistency and greater variations between different model architectures. This class also tends to yield poorer results overall. Notably, the performance of the RetinaNet model for the classification of \textit{S. aureus} is notably poor, particularly evident in the bright subset, where it achieves a mere 11.52~\% \ac{map}. Even in its best-performing scenario in the dark subset, the RetinaNet model results reach only 39.15~\% \ac{map}.
+In contrast, Faster R-CNN with ResNet 50 performs well, achieving a \ac{map} of 55.30~\% in the dark subset.
+
+
+
+In summary, Faster R-CNN models demonstrate superior performance, particularly in subsets with darker backgrounds or images with lower resolutions. Training models using the entire dataset also results in notable achievements. \newline
+
+
+
+
+
+\begin{table}[htbp]
+\centering
+\begin{tabularx}{\linewidth}{p{2.7cm}p{2.7cm}ccccc}
+\toprule
+\textbf{Model} & \textbf{Backbone} & \textbf{mAP} & \textbf{mAR} & \textbf{\textit{S. aureus}} & \textbf{\textit{P. aeruginosa}} & \textbf{\textit{E. coli}} \\
+\midrule
+
+\multirow{2}{*}{Faster R-CNN} & ResNet 50 & 47.86
+ & 53.80 &
+49.76&
+38.56&
+55.27
+ \\
+ & ResNet 101 & \textbf{51.09} &
+
+56.80&
+
+
+50.43&
+43.19&
+59.66
+ \\
+ 
+%\multirow{2}{*}{Mask R-CNN} & ResNet 50 & 46.33&
+
+%53.30&
+
+
+%47.53&
+%39.70&
+%51.75
+% \\
+% & ResNet 101 & 50.15&
+
+%56.40&
+
+
+%48.98&
+%43.04&
+%58.44
+% \\
+
+ \multirow{2}{*}{RetinaNet} & ResNet 50 & 38.23&
+
+47.60&
+
+
+17.89&
+38.46&
+57.34
+ \\
+ & ResNet 101 & 32.25&
+
+39.90&
+
+
+11.52&
+30.48&
+54.75
+ \\
+
+\bottomrule
+\end{tabularx}
+\caption{Bright subset (\%)}
+\label{tab:bright_results1}
+\end{table}
+
+
+
+
+
+
+
+
+\begin{table}[htbp]
+\centering
+\begin{tabularx}{\linewidth}{p{2.7cm}p{2.7cm}ccccc}
+\toprule
+\textbf{Model} & \textbf{Backbone} & \textbf{mAP} & \textbf{mAR} & \textbf{\textit{S. aureus}} & \textbf{\textit{P. aeruginosa}} & \textbf{\textit{E. coli}} \\
+\midrule
+
+\multirow{2}{*}{Faster R-CNN} & ResNet 50 & 51.89&
+
+59.60&
+
+
+40.31&
+50.27&
+65.09
+ \\
+ & ResNet 101 & \textbf{52.25}&
+
+60.00&
+
+
+40.10&
+51.82&
+64.82
+ \\
+
+%\multirow{2}{*}{Mask R-CNN} & ResNet 50 & 50.60&58.90&39.86&50.50&61.43 \\ & ResNet 101 & 49.60&58.20&35.78&49.54&61.00 \\
+ 
+\multirow{2}{*}{RetinaNet} & ResNet 50 & 47.04&
+
+56.00&
+
+
+23.16&
+52.10&
+65.86
+ \\
+ & ResNet 101 & 46.80&
+
+55.70&
+
+
+21.82&
+50.41&
+68.18
+ \\
+
+\bottomrule
+\end{tabularx}
+\caption{Vague subset (\%)}
+\label{tab:vague_results1}
+\end{table}
+
+
+
+
+\begin{table}[htbp]
+\centering
+\begin{tabularx}{\linewidth}{p{2.7cm}p{2.7cm}ccccc}
+\toprule
+\textbf{Model} & \textbf{Backbone} & \textbf{mAP} & \textbf{mAR} & \textbf{\textit{S. aureus}} & \textbf{\textit{P. aeruginosa}} & \textbf{\textit{E. coli}} \\
+\midrule
+
+
+
+
+
+\multirow{2}{*}{Faster R-CNN} & ResNet 50 & 
+62.10&
+
+68.30&
+
+
+55.30&
+63.36&
+67.65
+
+\\
+
+
+
+
+& ResNet 101 & 
+\textbf{62.39} &
+
+68.70&
+
+
+54.02&
+64.66&
+68.51
+ \\
+
+%\multirow{2}{*}{Mask R-CNN} & ResNet 50 & 62.60&68.60&55.99&62.81&69.04 \\ & ResNet 101 & 63.34&69.10&55.70&64.00&70.43 \\
+
+
+
+
+
+ 
+\multirow{2}{*}{RetinaNet} & ResNet 50 & 
+
+56.26&
+
+65.20&
+
+
+39.15&
+61.64&
+68.00
+\\
+
+
+
+& ResNet 101 & 
+55.36&
+
+64.60&
+
+
+37.38&
+61.13&
+67.58
+ \\
+
+\bottomrule
+\end{tabularx}
+\caption{Dark subset (\%)}
+\label{tab:dark_results1}
+\end{table}
+
+
+
+
+
+\begin{table}[htbp]
+\centering
+\begin{tabularx}{\linewidth}{p{2.7cm}p{2.7cm}ccccc}
+\toprule
+\textbf{Model} & \textbf{Backbone} & \textbf{mAP} & \textbf{mAR} & \textbf{\textit{S. aureus}} & \textbf{\textit{P. aeruginosa}} & \textbf{\textit{E. coli}} \\
+\midrule
+
+
+
+
+
+\multirow{2}{*}{Faster R-CNN} & ResNet 50 & 
+62.08&
+
+67.90&
+
+
+52.00&
+64.47&
+70.07
+\\
+
+
+
+
+
+& ResNet 101 & 
+
+\textbf{62.18} &
+
+68.00&
+
+
+50.56&
+65.32&
+70.36
+ \\
+
+%\multirow{2}{*}{Mask R-CNN} & ResNet 50 & 62.78&68.55&53.76&64.65&69.81 \\ & ResNet 101 & 62.56&68.65&53.23&64.83&68.82 \\
+
+
+
+ 
+\multirow{2}{*}{RetinaNet} & ResNet 50 & 
+
+54.62&
+
+62.40&
+
+
+30.22&
+63.47&
+70.18
+\\
+& ResNet 101 & 
+55.53&
+
+63.20&
+
+
+32.26&
+63.14&
+71.18
+\\
+
+\bottomrule
+\end{tabularx}
+\caption{Low Resolution subset (\%)}
+\label{tab:lowres_results1}
+\end{table}
+
+
+
+
+
+
+
+
+
+\begin{table}[htbp]
+\centering
+\begin{tabularx}{\linewidth}{p{2.7cm}p{2.7cm}ccccc}
+\toprule
+\textbf{Model} & \textbf{Backbone} & \textbf{mAP} & \textbf{mAR} & \textbf{\textit{S. aureus}} & \textbf{\textit{P. aeruginosa}} & \textbf{\textit{E. coli}} \\
+\midrule
+
+\multirow{2}{*}{Faster R-CNN} & ResNet 50 & 
+
+61.63 & 67.70 & 53.22 & 63.47 & 68.21 \\
+ & ResNet 101 & \textbf{62.10} & 68.00 & 53.00 & 63.75 & 69.56 \\
+
+%\multirow{2}{*}{Mask R-CNN} & ResNet 50 & 61.69&67.60&51.50&64.12&69.24 \\ & ResNet 101 & 62.01&67.75&52.75&63.56&68.83 \\
+
+ 
+\multirow{2}{*}{RetinaNet} & ResNet 50 & 
+54.49&
+
+63.40&
+
+
+34.30&
+61.21&
+67.96
+ \\
+ & ResNet 101 & 54.34&
+
+62.40&
+
+
+34.30&
+60.98&
+67.76
+ \\
+
+\bottomrule
+\end{tabularx}
+\caption{Total dataset (\%)}
+\label{tab:total_results1}
+\end{table}
+
+
+%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%
+
+
+
+\newpage
+\subsection{Transfer Learning Results}
+
+
+The transfer learning process was carried out as previously described in the methods section. This step was conducted based on the outcomes presented in the evaluation process of the test sets for each subset and the entire dataset. After the evaluation process outlined in the earlier subsection, subsets that exhibited poorer results were selected for further training. This additional training phase involved employing the pre-trained weights of the model that demonstrated the best overall performance.
+
+Consequently, the bright, vague, and low-resolution subsets underwent retraining using the Faster R-CNN model with ResNet 101 architecture. However, this time, the retraining was performed using the weights obtained from the initial training process conducted by the same model on the entire dataset.
+
+The outcomes obtained from the evaluation process of the retrained models are presented in Table \ref{tab:transferlearn_results1}. The table includes \ac{map} and \ac{mar} values, along with per-class \ac{map} scores. Additionally, the table features the percentage point difference between the results of the retrained models and the original results of the same model as presented in Tables \ref{tab:bright_results1}, \ref{tab:vague_results1}, and \ref{tab:lowres_results1}. Although the initial results from the low-resolution subset were quite satisfactory, this retraining process illustrated how transfer learning could benefit both worst-performing and also well-performing models.
+
+
+The results of the new training process have proven to be highly satisfactory, particularly for the subsets that initially displayed poorer results. 
+
+The bright subset had the most significant improvement in its \ac{map} and \ac{mar} values, achieving an overall \ac{map} of 58.36~\%, which is approximately 7 percentage points higher than the baseline. Moreover, the performance in the classification of \textit{P. aeruginosa} colonies, which originally had the lowest performance within this architecture, had the highest increase of 14.29 percentage points, resulting in a \ac{map} of 57.47~\%. Although the results for the other classes also exhibited improvement, the impact was not as pronounced. \newline
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabularx}{\linewidth}{p{1.8cm}ccccc}
+\toprule
+\textbf{Subset} & \textbf{mAP (\Delta)} & \textbf{mAR (\Delta)} & \textbf{\textit{S. aureus (\Delta)}} & \textbf{\textit{P. aeruginosa (\Delta)}} & \textbf{\textit{E. coli (\Delta)}} \\
+\midrule
+
+
+
+
+Bright  & 58.36 \textbf{(+7.27)} & 63.30 (+6.50) & 53.07 (+2.64) & 57.47 \textbf{(+14.29)} & 64.54 (+4.88) \\
+
+
+
+
+
+ 
+Vague & 56.32 (+4.08) & 63.20 (+3.20) & 41.77 (+1.66) & 58.61 (+6.79) & 68.59 (+3.77) \\
+
+
+
+
+Low Res  & \textbf{63.91 (+1.73)} & 69.60 (+1.60) & \textbf{53.53 (+2.97)} & \textbf{66.32 (+1.01)} & \textbf{71.88 (+1.52)}\\
+
+
+\bottomrule
+\end{tabularx}
+\caption{Results after applying Transfer Learning for the bright, vague and low-resolution subsets (\%) and the difference to the best baseline model results (percentage points)}
+\label{tab:transferlearn_results1}
+\end{table}
+
+
+
+
+The vague subset also experienced consistent improvement from the retraining process, although it ultimately achieved an overall \ac{map} lower than the bright subset. In the baseline evaluation, the vague subset had a slightly better result than the bright subset, but the retraining process had a greater impact on the bright subset's performance.
+
+The low-resolution subset, despite starting with a good baseline result, also experienced improvements ranging from 1.01 to 2.97 percentage points. Despite the relatively small differences, the \ac{map} for the low-resolution subset surpassed the overall best result from the baseline testing, which was 62.39~\% for the dark subset. Here, the low-resolution subset achieved an overall \ac{map} of 63.91~\%.
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%
+
+
+\newpage
+
+\subsection{Ensemble Results}
+
+Applying ensemble methods involves various strategies, such as training a combination of different models with different parameters or creating sub-samples within the dataset. Ensemble methods can also involve creating augmentations on the test set during evaluation or combining results obtained from different trained models.
+
+
+%%%
+In this project, the \ac{wbf} ensemble method was applied, where the results obtained from the various evaluation processes were combined to enhance the final performance. A grid search strategy was employed to identify the best combination of models and parameters for \ac{wbf}, including \ac{iou} and skip \ac{iou} thresholds. The results presented in Table \ref{tab:ensemble_results} reflect the outcomes of combining all models, including the results from transfer learning models for the respective subsets.
+
+
+
+%%%
+It is important to note that each model was given different weights based on performance. The optimal combination of parameters for \ac{wbf} was determined to be an \ac{iou} threshold of 0.75 and a skip \ac{iou} threshold of 0.01.
+
+
+
+
+
+
+
+
+
+
+%%%
+Upon applying the ensemble method, the performance of every subset experienced an increase. Once again, the bright subset displayed the higthest improvement, as observed in the transfer learning process, achieving a \ac{map} of 60~\%. Ultimately, the subset with the best performance was the low-resolution subset, which achieved a \ac{map} of 66,40~\%, a 4.22-point increase compared to the baseline model. Conversely, the vague subset was the least improved, achieving a \ac{map} of 57.90~\%. Similarly to the transfer learning process, fine-tuning methods appeared to have less impact on the vague subset than the bright subset. \newline
+
+
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabularx}{\linewidth}{p{1.8cm}ccccc}
+\toprule
+\textbf{Subset} & \textbf{mAP (\Delta)} & \textbf{mAR (\Delta)} & \textbf{\textit{S. aureus (\Delta)}} & \textbf{\textit{P. aeruginosa (\Delta)}} & \textbf{\textit{E. coli (\Delta)}} \\
+\midrule
+
+Bright  & 60.00 \textbf{(+8.91)} & 67.20 (+10.40) & 56.60 (+6.17) & 57.20 \textbf{(+14.01)} & 66.10 (+6.45) \\
+ 
+Vague & 57.90 (+5.65) & 66.40 (+6.40) & 43.90 (+3.80) & 59.20 (+7.38) & 70.50 (+5.68) \\
+
+Dark & 66.20 (+3.81) & 72.80 (+4.10) & \textbf{59.00 (+4.98)} & 67.60 (+2.94) & 72.00 (+3.49) \\
+
+
+
+
+
+Low Res  & \textbf{66.40 (+4.22)} & 72.70 (+4.70) & 57.30 (+6.74) & \textbf{68.40 (+3.09)} & \textbf{73.30 (+2.94)}\\
+
+
+
+
+
+Total & 65.10 (+3.00) & 71.70 (+3.70) & 56.20 (+3.20) & 67.30 (+3.55) & 71.60 (+2.04) \\
+
+
+
+
+
+\bottomrule
+\end{tabularx}
+\caption{Results after applying \ac{wbf} for each subset (\%) and the difference to the best baseline model results (percentage points)}
+\label{tab:ensemble_results}
+\end{table}
+
+
+
+
+
+%%%
+The ensemble approach also significantly improved the per-class performance. \textit{S. aureus} continued to be the most challenging class to classify, particularly within the vague subset. For \textit{P. aeruginosa}, the bright subset exhibited the lowest performance at 57.20~\%, but this subset also experienced the most substantial improvement, with an increase of 14 percentage points. The classification of \textit{E. coli} remained the most consistent across subsets, achieving the best performance among the three classes.
+
+
+
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%
+
+
+\newpage
+
+\section{Second part results}
+
+
+
+\subsection{Base models evaluation}
+
+The results obtained from evaluating the newly created dataset are presented in Table \ref{tab:newset_results}. The same models and backbone architectures from the first part of the project were used.
+
+In contrast to the results from the \ac{agar} dataset, the best-performing model in this scenario was RetinaNet with ResNet 101 architecture, achieving a \ac{map} of 52.40~\%. On the other hand, the worst performer was Faster R-CNN ResNet 101 model, achieving a \ac{map} of 47.94~\%, almost five percentage points lower than the top-performing RetinaNet model.
+
+Similar to the previous part, the classification of \textit{E. coli} colonies demonstrated the best results among the three classes. Conversely, \textit{P. aeruginosa} species proved to be the most challenging to classify, with the worst results across the models. Notably, unlike the \ac{agar} dataset, the RetinaNet models did not struggle in classifying \textit{S. aureus}. In the first part of the project, RetinaNet exhibited the lowest results for classifying this species. However, with the newly created dataset, RetinaNet achieved the best results, attaining a value of 52.20~\% \ac{map}.
+
+
+
+
+
+\begin{table}[htbp]
+\centering
+
+\begin{tabularx}{\linewidth}{p{2.7cm}p{2.7cm}ccccc}
+\toprule
+\textbf{Model} & \textbf{Backbone} & \textbf{mAP} & \textbf{mAR} & \textbf{\textit{S. aureus}} & \textbf{\textit{P. aeruginosa}} & \textbf{\textit{E. coli}} \\
+\midrule
+
+
+
+
+\multirow{2}{*}{Faster R-CNN} & ResNet 50 & 
+48.59
+& 55.80 &
+46.39&
+43.78&
+55.61
+\\
+
+
+
+& ResNet 101 & 
+47.94&
+
+55.40&
+
+
+45.16&
+43.88&
+54.77
+\\
+ 
+
+
+
+\multirow{2}{*}{RetinaNet} & ResNet 50 & 
+\textbf{52.40}&
+
+59.40&
+
+
+52.20&
+47.77&
+57.23
+\\
+
+
+
+
+& ResNet 101 & 
+
+51.92&
+
+58.60&
+
+
+51.39&
+46.67&
+57.71
+\\
+
+\bottomrule
+\end{tabularx}
+\caption{New dataset (\%)}
+\label{tab:newset_results}
+\end{table}
+
+
+
+
+
+%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%
+
+
+\newpage
+\subsection{Transfer Learning Results}
+
+
+Continuing with a similar structure as in the first part, the dataset was retrained, utilizing the weights of the previously trained models in the new training process. This step had a slight difference compared to the first part. In this phase, the weights of the pre-trained models were taken from the models trained on the \ac{agar} dataset. Several training cycles were performed for this part, using the weights from the different models trained on the entire \ac{agar} dataset and the weights of the models trained on the different subsets. 
+The objective was to observe how the transfer of knowledge from the models trained on the \ac{agar} dataset would impact the performance of the new dataset.
+
+Having trained the new dataset using the multiple models trained on the \ac{agar} dataset and its subsets, it was concluded that the use of the weights from the model RetinaNet ResNet 50 trained on the entirety of the \ac{agar} dataset resulted in the best performance. These results are illustrated in Table \ref{tab:newdata_transfer}.
+
+There was a small increase in the overall \ac{map} and \ac{mar} metrics, of 0.79 and 0.50 percentage points, respectively. Similarly, the performance for the classification of each class also saw a slight increase, with the classification of \textit{E. coli} and \textit{S. aureus} showing the most improvement, both by around 1 percentage point.
+
+Since the improvements in the results from the other models were lower than the ones mentioned, those results are not illustrated here.
+
+
+
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabularx}{\linewidth}{p{1.8cm}ccccc}
+\toprule
+\textbf{Subset} & \textbf{mAP (\Delta)} & \textbf{mAR (\Delta)} & \textbf{\textit{S. aureus (\Delta)}} & \textbf{\textit{P. aeruginosa (\Delta)}} & \textbf{\textit{E. coli (\Delta)}} \\
+\midrule
+
+
+
+
+New Dataset  
+&\multirow{2}{*}{53.19 (+0.79)}  
+&\multirow{2}{*}{59.90 (+0.50) } 
+ &\multirow{2}{*}{53.24 (+1.04)}  
+&\multirow{2}{*}{48.07 (+0.30)}  
+&\multirow{2}{*}{58.28 (+1.05)}  \\
+
+
+
+
+\bottomrule
+\end{tabularx}
+\caption{Results after applying Transfer Learning for the dataset (\%) and the difference to the the best baseline model results (percentage points)}
+\label{tab:newdata_transfer}
+\end{table}
+
+
+
+
+
+
+%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%
+
+\newpage
+\subsection{Ensemble Results}
+
+Similar to the first part, various results were assembled using the \ac{wbf} method. Again, a grid search strategy was adopted to find the best parameter combination, and the models' results were weighted based on their performance. As in the previous part, the optimal threshold values were 0.75 for the \ac{iou} threshold and 0.01 for the skip \ac{iou} threshold.
+
+In Table \ref{tab:newdata_ensemble}, it is evident that this ensemble method showed a better improvement than transfer learning. However, the use of transfer learning models' results contributed to enhancing the performance. When the ensemble was performed solely with the baseline models, the performance was generally lower by approximately one percentage point compared to the illustrated results.
+
+The \ac{wbf} method increased almost four percentage points in the overall \ac{map} value, leading to the highest value of 56.30~\%. On a per-class basis, the results were increased for every class, with improvements ranging from 3 to 4 percentage points. \textit{P. aeruginosa} remained the class with the lowest classification performance, achieving a \ac{map} of 51.80~\%, while \textit{E. coli} had the best classification performance with a value of 60.50~\%.
+
+
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabularx}{\linewidth}{p{1.8cm}ccccc}
+\toprule
+\textbf{Subset} & \textbf{mAP (\Delta)} & \textbf{mAR (\Delta)} & \textbf{\textit{S. aureus (\Delta)}} & \textbf{\textit{P. aeruginosa (\Delta)}} & \textbf{\textit{E. coli (\Delta)}} \\
+\midrule
+
+
+
+New Dataset  
+&\multirow{2}{*}{\textbf{56.30 (+3.90)}} 
+&\multirow{2}{*}{62.90 (+3.50)}  
+&\multirow{2}{*}{56.50 (+4.30)}  
+&\multirow{2}{*}{51.80 (+4.03)}  
+&\multirow{2}{*}{60.50 (+3.27)}  \\
+
+
+
+
+
+\bottomrule
+\end{tabularx}
+\caption{Results after applying \ac{wbf} for the dataset (\%) and the difference to the the best baseline model results (percentage points)}
+\label{tab:newdata_ensemble}
+\end{table}

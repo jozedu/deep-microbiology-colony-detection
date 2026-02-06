@@ -1,0 +1,194 @@
+%\chapter{\textbf{Data Exploration}}  \label{data}
+
+\section{Exploratory Data Analysis}
+
+This project was developed upon the dataset that was provided by \cite{agar}. The main objective of the authors for the creation of this dataset was to have a diverse dataset for neural network training. The \ac{agar} dataset consists on 18 thousand annotated Petri dish photos, with over 330 thousand labeled microbial colonies. There are colonies of four different bacteria (\emph{Staphulococcus aureus}, \emph{Bacillus subtilis}, \emph{Pseudomonas aeruginosa}, \emph{Escherichia coli} and one yeast strain (\emph{Candida albicans}) \citep{agar}. After the selection of the microorganisms, dilution, inoculation on general-purpose and nonselective growth media, and incubation for around 24 hours, the images of the plates were taken. These are divided in two major groups - high resolution (4000x6000 px) and low resolution (2048x2048 px) images - and the first group is divided three subgroups according to lightning conditions - bright, dark and vague. After this, annotations on the classification of the colonies for each image was done by professionals \citep{agar}. The
+bright and dark setups were made with the whole setup closed in a box to eliminate the influence of ambient light. The difference between
+them lies in the color of plexiglass used - a stand—white for bright subgroup, and a black one for the dark one. The last subgroup, vague,
+was exposed to the available light, which resulted in low contrast images, that were difficult to annotate even by professional microbiologists \citep{agar}.
+The dataset contains plaques that have no visible colonies, that have countable colonies and plaques with so many colonies that were uncountable. At a certain number of colonies, it becomes impossible for one to distinguish them, as they start to form a mesh. So this group of plaques have a qualitative value for the counting. In practice, when there are a high number of colonies, higher than 100 depending on the situation, the precise number of colonies is not really necessary, as it does not have a clinical significance. In this cases the important information is if the colonies are all similar, from the same microorganism, or if there is a mix of organisms. When the first case occurs the quantification is given as order of magnitude.  
+
+Below, it is represented the distribution of "empty", "countable" and "uncountable" plaques according to the background of the images, as well as the number of annotations for each species. These graphs are taken from \cite{agar}.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\linewidth]{images/agar.png}
+    \caption{The number of samples distribution from the original dataset: (a) over different microbial species,
+and (b) for different acquisition setup subgroups.}
+    \label{fig:agar_dist}
+\end{figure}
+
+The combination of samples from bright and dark subgroups constitutes
+about half of the whole dataset and includes photos with the best quality in terms of the contrast between grown microorganisms and agar surface.
+As seen in the histogram, for each subgroup, the categories \textit{S. aureus}, \textit{P. aeruginosa} and \textit{E. coli} are overal the more balances categories. When looking at \textit{B. subtilis}, it is visible that is most under represented in all subgroups, being even absent in the "vague" subgroup. \textit{C. albicans} is also not so well balanced, and is as well absent in the "vague" subgroup. 
+
+For this project were selected the images that only contained annotations on three categories - \textit{S. aureus}, \textit{P. aeruginosa}, \textit{E. coli} - mainly because of being more balanced throughout the dataset, but also due to high clinical relevance of those three species, since they are very common pathogenic agents in diverse human infections. For this, from the entire dataset, the images that contained annotations of \textit{B. subtilis}, \textit{C. albicans} and also "Contamination" or "Defect" were removed.
+Besides this, since one of the goals of the project is to evaluate colonies counting, the uncountable figures were also removed. Further, the dataset was reduced by removing the images that contained more than 100 annotations, for various reasons. As said before, from around 100 colonies, the clinical value will not differ much. Also, the models that were used for training and evaluation in the project are originally made so that the maximum of annotations for each image was 100. Lastly, this didn't have much effect on the number of images, since there were few images with more than 100 annotations. 
+
+With this, the dataset for the project is made of a total of 9851 images, 182864 annotations and 3 categories (\textit{S. aureus}, \textit{P. aeruginosa} and \textit{E. coli}). From these images, 1217 were empty plaques. The empty plaques were kept mainly to analyze the performance on the counting problem. In practice, it is important to correctly identify an empty plaque or one that has colonies growing. The higher the number of colonies, the less important is to have an accurate counting.
+
+The other 8634 images contained annotations from the three categories, and each image may have one or more categories. 
+When referring to the type of background, 8,2\% belong to the Bright Background, 45,3\% have Dark Background and 8,8\% are from the Vague Background. These three groups contain high resolution images, and make up 62,3\% of the dataset. The rest 37,7\% are low resolution images. This distribution is represented on Figure \ref{fig:dist_background}.
+Figure \ref{fig:count_empty} reflects the distribution of images that contain colonies, therefore annotations, and images that are empty.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.7\linewidth]{images/back_perc.png}
+    \caption{Distribution of the dataset according to the background type.}
+    \label{fig:dist_background}
+\end{figure}
+
+
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\linewidth]{images/count_empty.png}
+    \caption{Distribution of countable and empty images on the whole dataset, as well as within each Background group.}
+    \label{fig:count_empty}
+\end{figure}
+
+
+When analyzing the dataset, it is important to determine how are the classes distributed throughout the whole dataset, and also within each type of background group. In order to evaluate this, the relative frequency of each class within the dataset was calculated. This was represented through histograms in Figures \ref{fig:hists_back} and \ref{fig:hists_total}.
+It is possible to say that the whole dataset is relatively well balanced. Class \textit{P. aeruginosa} is the class with less annotations, with a presence of 27,72\%. 
+When analysing each group of images, Dark Background images are the most well balanced. The most unbalanced is the Vague Dataset, which is in accordance to the original AGAR dataset. Bright and Low Resolution images have a majority of one class - \textit{S. aureus} in the first, with 42,65\% and \textit{E. coli} in the second with 41,87\%.
+In general, there are not huge discrepancies in class distribution, except in the Vague dataset.
+
+Since this project will not only focus on the classification of the colonies, having also the target to evaluate their counting, Figure \ref{fig:annotationsperimage} shows how many images there are that have a determined number of annotations. As explained before, the countable images have a maximum of 100 annotations. In general, most of the images have less than around 100 annotations. 
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.7\textwidth]{images/histstotal.png}
+    \caption{Distribution of classes for the whole dataset.}
+    \label{fig:hists_total}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{images/hists2.png}
+    \caption{Distribution of classes for each kind of Background.}
+    \label{fig:hists_back}
+\end{figure}
+
+
+
+%\begin{figure}[!ht]
+%    \centering
+%    \includegraphics[width=\textwidth]{images/anns_total.png}
+%    \caption{Number of annotated instances per image for the whole dataset.}
+%    \label{fig:anns_total}
+%\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[height=20cm,width=.9\textwidth]{images/anns100_new.png}
+    \caption{Number of annotations per image and the corresponding count of images for each annotation count: Whole dataset and different subsets.}
+    \label{fig:annotationsperimage}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[height=20cm,width=.9\textwidth]{images/ann_class_new.png}
+    \caption{Number of annotations per image, for each class, and the corresponding count of images for each annotation count.}
+    \label{fig:class_anns}
+\end{figure}
+
+% METER FOTOS COM EXEMPLOS DE CADA BACKGROUND E CLASSE
+
+
+\newpage
+\section{Annotations}
+
+The creators of the dataset developed a web application for microbiologists to upload and annotate agar plate culture photos. This allowed them to mark each sample as countable, uncountable, or empty. In the original dataset, samples with more than 300 colonies were treated as uncountable, although some samples may have also been marked as uncountable due to difficulties in colony identification. For samples with colony numbers ranging from 50 to 300, there may have been difficulties in identifying colony boundaries if they agglomerated.
+
+For the samples that were countable, microbiologists annotated each colony with its location using bounding boxes and assigned a class to it (that were already presented before).
+
+The annotations are stored in one JSON file, in the COCO format.
+There are various types of annotations formats to be used for object detection projects. The most commonly used are the COCO format, the VOC-PASCAL and also the YOLO format. Although in different formats, they all store the same information, that is, the identification of the images and the respective bounding boxes coordinates.
+
+The common COCO format usually stores more information, although the important ones are obviously the images identifications and the coordinates of the bounding boxes. The coordinates of each box are stored in a vector  $"box": [x, y, width, height]$ in which $x$ and $y$ represent the $x$ and $y$ coordinates of the top left corner of the bounding box. As an example of the differences between formats, the YOLO annotations store the boxes as a vector $"box: [xc, yc, width rel, height rel]$, where $xc$ and $yc$ refer to the coordinates of the center point of the box, divided to the width and height of the image, respectively, while $width rel$ and $height rel$ refer to the width of the box divided by the width of the image, and the same for the height.
+
+Besides bounding boxes, the COCO annotations are also used to store information for segmentation and keypoint projects.
+
+It is shown, below, the organization of the original annotations file from the AGAR dataset.
+
+\lstset{%
+    basicstyle=\ttfamily\footnotesize,
+    commentstyle=\color{gray},
+    keywordstyle=\color{blue},
+    stringstyle=\color{red},
+    tabsize=2,
+    showstringspaces=false,
+    breaklines=true,
+    frame=none,
+    captionpos=b,
+    aboveskip=10pt,
+    belowskip=10pt
+}
+
+\begin{lstlisting}[caption={Examples of the original JSON file of the AGAR dataset.}, label={lst:annotations}]
+{
+    "info": {
+        "description": "AGAR: a microbial colony dataset for accurate deep learning detection", 
+        "url": "http://agar.neurosys.com", 
+        "version": "1.0", 
+        "year": 2020, 
+        "contributor": "NeuroSYS Research", 
+        "date_created": "2020/03/31"
+    }, 
+    
+    "licenses": [
+        {
+            "url": "http://creativecommons.org/licenses/by-nc/2.0/", 
+            "name": "Attribution-NonCommercial 2.0 Generic", 
+            "id": 1
+        }
+    ], 
+    
+    "images": [
+        {
+            "id": 1, 
+            "license": 1, 
+            "file_name": 
+            "1.jpg", 
+            "width": 3660, 
+            "height": 4000, 
+            "items_count": 0, 
+            "background_category_id": 0
+        }, 
+        ...
+    ],
+
+    "annotations": [
+        {
+            "segmentation": [[1767, 2579, 1767, 2652, 1840, 2652, 1840, 2579]], 
+            "area": 5329, 
+            "ignore": 0, 
+            "iscrowd": 0, 
+            "image_id": 309, 
+            "bbox": [1767, 2579, 73, 73], 
+            "category_id": 2, 
+            "id": 1
+        }, 
+        ...
+    ],
+
+    "categories": [
+        {
+            "supercategory": "microbes", 
+            "id": 0, 
+            "name": "S.aureus"
+        }, 
+        ...
+    ],
+
+    "background_categories": [
+        {
+            "supercategory": "background", 
+            "id": 0, 
+            "name": "bright"
+        },
+        ...
+    ]
+}
+\end{lstlisting}
+

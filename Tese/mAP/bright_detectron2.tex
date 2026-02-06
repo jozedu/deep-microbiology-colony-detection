@@ -1,0 +1,81 @@
+~10 epochs
+
+batch = 8
+704
+900 iters
+
+DONE (t=0.05s).
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area=   all | maxDets=100 ] = 0.225
+ Average Precision  (AP) @[ IoU=0.50      | area=   all | maxDets=100 ] = 0.380
+ Average Precision  (AP) @[ IoU=0.75      | area=   all | maxDets=100 ] = 0.248
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area= small | maxDets=100 ] = 0.008
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area=medium | maxDets=100 ] = 0.131
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area= large | maxDets=100 ] = 0.250
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets=  1 ] = 0.014
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets= 10 ] = 0.092
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets=100 ] = 0.260
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area= small | maxDets=100 ] = 0.008
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area=medium | maxDets=100 ] = 0.148
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area= large | maxDets=100 ] = 0.295
+[05/22 17:46:13 d2.evaluation.coco_evaluation]: Evaluation results for bbox: 
+|   AP   |  AP50  |  AP75  |  APs  |  APm   |  APl   |
+|:------:|:------:|:------:|:-----:|:------:|:------:|
+| 22.463 | 38.015 | 24.804 | 0.792 | 13.051 | 25.033 |
+[05/22 17:46:13 d2.evaluation.coco_evaluation]: Per-category bbox AP: 
+| category   | AP     | category     | AP    | category   | AP     |
+|:-----------|:-------|:-------------|:------|:-----------|:-------|
+| S.aureus   | 29.537 | P.aeruginosa | 9.698 | E.coli     | 28.153 |
+OrderedDict([('bbox', {'AP': 22.462703273585067, 'AP50': 38.015186448129114, 'AP75': 24.804394400363254, 'APs': 0.7916077322017916, 'APm': 13.051446913247988, 'APl': 25.0330052782154, 'AP-S.aureus': 29.537052474757665, 'AP-P.aeruginosa': 9.698097834243919, 'AP-E.coli': 28.1529595117536})])
+
+-------------------------------
+
+# Inference should use the config with parameters that are used in training
+# cfg now already contains everything we've set previously. We changed it a little bit for inference:
+
+
+
+
+
+from detectron2.engine import DefaultTrainer
+
+cfg = get_cfg()
+#cfg.merge_from_file(model_zoo.get_config_file(config_file))
+
+cfg.merge_from_file(model_zoo.get_config_file(config_file))
+#cfg.DATASETS.TRAIN = (train_name,)
+cfg.DATASETS.TEST = (test_name,)
+cfg.DATALOADER.NUM_WORKERS = 4
+
+
+cfg.SOLVER.IMS_PER_BATCH = batch  # This is the real "batch size" commonly known to deep learning people
+cfg.SOLVER.BASE_LR = 0.00025  # pick a good LR
+#cfg.SOLVER.MOMENTUM = 0.9
+#cfg.SOLVER.WEIGHT_DECAY = 0.0005
+cfg.SOLVER.MAX_ITER = 900    # 
+cfg.SOLVER.STEPS = []        # decay learning rate
+
+#cfg.SOLVER.WARMUP_FACTOR = 1.0 / 1000
+#cfg.SOLVER.WARMUP_ITERS = min(1000,save_checkpoint)
+#cfg.SOLVER.WARMUP_METHOD = "linear"
+
+cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 512   # The "RoIHead batch size". 128 is faster, and good enough for this toy dataset (default: 512)
+cfg.MODEL.ROI_HEADS.NUM_CLASSES = 3  # only has one class (ballon). (see https://detectron2.readthedocs.io/tutorials/datasets.html#update-the-config-for-new-datasets)
+# NOTE: this config means the number of classes, but a few popular unofficial tutorials incorrect uses num_classes+1 here.
+
+cfg.DATALOADER.FILTER_EMPTY_ANNOTATIONS = False
+
+#cfg.SOLVER.CHECKPOINT_PERIOD = save_checkpoint
+
+#cfg.OUTPUT_DIR = output_dir
+
+
+
+
+
+cfg.MODEL.ROI_HEADS.NUM_CLASSES = 3
+cfg.MODEL.WEIGHTS = os.path.join(output_check, "model_final.pth")  # path to the model we just trained
+cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.5   # set a custom testing threshold
+#cfg.MODEL.ROI_HEADS.NMS_THRESH_TEST = 0.5
+
+cfg.TEST.DETECTIONS_PER_IMAGE = 300
+predictor = DefaultPredictor(cfg)

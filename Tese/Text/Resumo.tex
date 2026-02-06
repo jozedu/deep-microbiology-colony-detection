@@ -1,0 +1,21 @@
+\chapter*{Resumo}
+
+A automatização tem ganho importância nos laboratórios médicos, especialmente nos setores de química clínica e hematologia. No entanto, os laboratórios de microbiologia ainda dependem muito de processos manuais. Um passo particularmente moroso é a cultura de amostras em placas de agar, seguida da sua revisão manual para posterior identificação dos microrganismos e análise do perfil de antibióticos. Esta dissertação aborda esta questão através da aplicação de métodos de \textit{deep learning} para a classificação de colónias microbianas.
+
+Dividida em duas partes, a primeira parte do projeto foca-se no treino e na melhoria da performance de quatro modelos na base de imagens anotadas \textit{Annotated Germs for Automated Recognition} (AGAR). Os modelos são Faster R-CNN e RetinaNet, com duas arquiteturas distintas (ResNet 50 e ResNet 101). Métodos de \textit{transfer leaning} e \textit{ensemble} são aplicados para melhoria da performance.
+
+
+A segunda parte envolve a criação de uma nova base de imagens com 165 imagens anotadas de placas de agar com vários tipos de meios de cultura, com colónias de \textit{S. aureus}, \textit{P. aeruginosa} e \textit{E. coli}. Os mesmos modelos são treinados e são aplicadas técnicas semelhantes para melhoria do desempenho. O \textit{transfer leaning} é aplicado usando os pesos dos modelos treinados nas imagens AGAR.
+
+
+
+O treino inicial atinge uma precisão média (mAP) de 62~\% na base de dados AGAR, com Faster R-CNN ResNet 101 a apresentar o melhor desempenho. Um valor de mAP de 66,40~\% é alcançado com a aplicação do método de \textit{ensemble} \textit{Weight Boxes Fusion}, superando os resultados relatados pelos autores da base de dados AGAR. Na nova base de imagens, o modelo RetinaNet ResNet 50 alcança um desempenho inicial de 52,40~\%, que aumenta para 56,30~\% através da aplicação do método de \textit{ensemble}.
+
+Em resumo, esta dissertação melhora com sucesso o desempenho na base de dados AGAR, introduz um novo conjunto de imagens e emprega várias técnicas para melhoria do desempenho. Este trabalho representa, assim, um passo em frente na aplicação de métodos de \textit{deep learning} no domínio da medicina laboratorial.
+
+
+
+
+\noindent
+{\bf Palavras-chave:} Microbiologia; Deep Learning; Deteção de Objetos; Colónias Bacterianas.
+

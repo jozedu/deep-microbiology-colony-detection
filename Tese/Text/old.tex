@@ -1,0 +1,43 @@
+\chapter{\textbf{Results}} \label{results}
+
+In this chapter, we present the results of our experiments with training datasets and object detection models. We begin by evaluating the performance of base object detection models on different subsets of the dataset. Subsequently, we analyze the impact of transfer learning and ensemble methods on model performance. The results are presented in terms of mean Average Precision (mAP), mean Average Recall (mAR), and specific class detection rates for \textit{S. aureus}, \textit{P. aeruginosa}, and \textit{E. coli}.
+
+\section{First Part Results}
+
+\subsection{Base Models Evaluation}
+
+We first evaluate the performance of base object detection models on various subsets of the dataset. The subsets include the Bright, Vague, Dark, Low Resolution, and the Total dataset.
+
+Table \ref{tab:bright_results1} presents the results for the Bright subset. The Faster R-CNN model with ResNet 101 backbone achieves the highest mAP of 51.09%, while RetinaNet with ResNet 101 backbone achieves the highest mAR of 56.80%.
+
+Table \ref{tab:vague_results1} displays the results for the Vague subset. Again, Faster R-CNN with ResNet 101 backbone achieves the highest mAP of 52.25%, and RetinaNet with ResNet 101 backbone achieves the highest mAR of 55.70%.
+
+Table \ref{tab:dark_results1} shows the results for the Dark subset. Here, Faster R-CNN with ResNet 101 backbone achieves the highest mAP of 62.39%, and RetinaNet with ResNet 50 backbone achieves the highest mAR of 65.20%.
+
+Table \ref{tab:lowres_results1} demonstrates the results for the Low Resolution subset. Faster R-CNN with ResNet 50 backbone achieves the highest mAP of 66.40%, and RetinaNet with ResNet 50 backbone achieves the highest mAR of 72.70%.
+
+Finally, Table \ref{tab:total_results1} presents the results for the entire dataset. Faster R-CNN with ResNet 101 backbone achieves the highest mAP of 62.18%, and RetinaNet with ResNet 101 backbone achieves the highest mAR of 64.60%.
+
+\subsection{\hl{Transfer Learning Results}}
+
+In this subsection, we analyze the impact of transfer learning on model performance. Table \ref{tab:transferlearn_results1} displays the results for the Bright, Vague, and Low Resolution subsets. We observe improvements in all metrics compared to the best baseline model results. For example, in the Bright subset, the mAP increases by 7.27 percentage points (pp) when using transfer learning.
+
+\subsection{\hl{Ensemble Results}}
+
+We also explore the effects of ensemble methods on model performance. Table \ref{tab:ensemble_results} presents the results for the Bright, Vague, Dark, Low Resolution, and Total subsets. Notably, ensemble methods consistently yield improvements across subsets and metrics. In the Vague subset, for instance, the mAP increases by 5.65 pp through ensemble methods.
+
+\section{Second Part Results}
+
+\subsection{Base Models Evaluation}
+
+Moving to the second part of our study, we evaluate the base object detection models on a new dataset. The results are shown in Table \ref{tab:newset_results}. Here, RetinaNet with ResNet 50 backbone achieves the highest mAP of 52.40%, and RetinaNet with ResNet 101 backbone achieves the highest mAR of 59.40%.
+
+\subsection{\hl{Transfer Learning Results}}
+
+We analyze the impact of transfer learning on the new dataset. Table \ref{tab:newdata_transfer} presents the results, showcasing modest improvements compared to the best baseline model results. For instance, in the New Dataset subset, the mAP increases by 0.79 pp through transfer learning.
+
+\subsection{\hl{Ensemble Results}}
+
+Finally, we investigate the effects of ensemble methods on the new dataset. Table \ref{tab:newdata_ensemble} demonstrates improvements achieved through ensemble methods. For instance, in the New Dataset subset, the mAP increases by 3.90 pp using ensemble methods.
+
+These results underscore the importance of dataset curation, transfer learning, and ensemble methods in enhancing the performance of object detection models. The improvements achieved through these techniques provide valuable insights for practical applications of these models in real-world scenarios.

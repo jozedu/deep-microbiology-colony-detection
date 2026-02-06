@@ -1,0 +1,119 @@
+\chapter{\textbf{Conclusion}}  \label{conclusion}
+
+This dissertation employed various deep-learning models designed for object detection to classify bacterial colonies inoculated in culture media using two distinct datasets. The first dataset, made publicly available by \cite{agar}, consists of thousands of annotated high-resolution images of Petri dishes with \ac{tsa} culture media with five different species. The second dataset was created during this project, containing 165 annotated images with three species inoculated in various types of culture media. \newline
+
+This study was conducted in two distinct parts.
+The first part involved utilising the \ac{agar} dataset to classify \textit{E. coli}, \textit{S. aureus}, and \textit{P. aeruginosa} colonies. In this phase, different approaches, such as transfer learning and ensemble methods, were applied to improve the performance reported in the literature.
+
+The second part of the study encompassed the creation and annotation of a smaller dataset containing images to classify the same bacterial species. This dataset included a variety of culture media, such as blood agar and chocolate agar, as well as more specific agars where the bacteria were inoculated. This section aimed to enhance the baseline performance of the models trained in this dataset by employing transfer learning techniques using the weights from models trained on the first dataset. Additionally, the ensemble of results was applied to enhance the classification outcomes further.    \newline
+
+
+
+As mentioned earlier, the dataset created and presented by \cite{agar} served as the foundation for this study. They established the dataset and conducted training using several models for colony classification and counting. Among the models employed were Faster R-CNN with various architectures, including ResNet 50 and 101, also used in this project. Additionally, they explored other models such as Cascade R-CNN, one-stage detectors like YOLOv4, and transformer-based models \citep{agar-cnn}.
+
+The authors divided their dataset into two subsets for training. One subset consisted of high-resolution images (excluding the vague subset), while the other contained low-resolution images. Their reported results in terms of \ac{map} varied from 49.3~\% to 52.3~\% for the high-resolution subset and from 56~\% to 59.4~\% for the low-resolution subset. Notably, the Cascade R-CNN model yielded the best outcomes among their tested models, although it was not applied in this project. Furthermore, when assessing per class \ac{map} values, the class \textit{S. aureus} was the one for which the models achieved the most favourable results. 
+
+In this project, the highest performing model on this dataset was Faster R-CNN with ResNet 101 backbone. Notably, there are distinctions between this project and the work conducted by \cite{agar}. In the present study, an intentional decision was made to focus on only three species, accompanied by the exclusion of images with over 100 annotations. This selection led to a reduction in the dataset size by more than 8000 images. This process was primarily motivated by the clinical relevance of \textit{S. aureus}, \textit{E. coli}, and \textit{P. aeruginosa} as prominent pathogenic agents in human infections. Conversely, \textit{B. subtilis} lacks substantial clinical significance, and \textit{C. albicans}, while prevalent, was excluded due to its classification as a yeast rather than a bacterium.
+
+Furthermore, instead of categorising the dataset into subsets based on high and low resolution, this project divided it according to different background types: bright, dark, vague, and a subset containing low-resolution images, given that images with varying backgrounds were high-resolution. Additionally, the entire dataset was used for training. This was performed to gain insights into the models' performance across different luminosity backgrounds. Notably, the subset that yielded the best results was the dark subset, achieving 62.39~\%. Additionally, the low-resolution subset, which can be compared with the one used by the authors, achieved a \ac{map} of 62.18~\%, surpassing the authors' result of 57.3~\% on the same model.
+On the other hand, in the high-resolution subset examined by the authors, encompassing both the dark and bright subsets, they managed to achieve approximately 50\% \ac{map} using both Faster R-CNN models and reached 52,3\% with Cascade R-CNN ResNeXt101. In comparison, in this project, the bright and dark subsets yielded 51.09~\% and 62.39~\% respectively.
+
+These discrepancies in results can be attributed to the reduction in the number of classes and annotations in this study. Furthermore, limited computational resources prevented the replication of the pre-processing and augmentations employed by the authors during their training process, which contributed to the divergence in outcomes.
+
+In the per-class analysis, the authors exclusively reported results for the model trained on the high-resolution subset, employing Faster R-CNN ResNet50 and Cascade R-CNN HRNet. Notably, their outcomes favoured classifying smaller-sized colonies like \textit{S. aureus}. This contrasts with the findings in this dissertation, where the classification of \textit{S. aureus} colonies proved to be the most challenging across all subsets, except for the bright subset, where Faster R-CNN models exhibited greater difficulty with \textit{P. aeruginosa} colonies.
+
+This divergence in results can be attributed to the pre-processing strategy adopted by the authors, which involved dividing images into multiple lower-resolution patches. In contrast, the images in this study were not segmented in this manner, leading to the resizing of the images by the models. Consequently, smaller colonies became more intricate for the models to detect and classify, particularly noticeable in the case of RetinaNet models. These models exhibited notably lower performance compared to the two-stage models.
+
+Carrying out object detection predictions for small objects proves to be a significant challenge, particularly when employing one-stage models like RetinaNet, in contrast to the performance of two-stage models \citep{small_objects_retina}. Despite often possessing higher inference speeds, single-stage models typically approach the entire network as a regression problem, making simultaneous predictions for object location and category. These models tend to generate many candidate bounding boxes, particularly negative examples corresponding to background or non-object regions. These models need help to effectively handle the challenge posed by the class imbalance between negative and positive regions containing actual objects \citep{small_objects_retina}.
+
+In summary, single-stage models such as RetinaNet do not appear to be the most suitable solution for tasks involving the detection of small objects. This holds true unless some pre-processing is applied to the images or adjustments are made to the model architecture. Notably, other one-stage models like the \ac{yolo} models mentioned earlier in the dissertation have demonstrated impressive results across a range of object detection tasks. While not explored in this project, these models hold the potential for achieving enhanced performance and fast inference speed.
+
+
+The lower performance observed in the bright subset can be attributed to reduced contrast and colour similarity between colonies and the background. Within this subset, the classification of \textit{P. aeruginosa} exhibits the weakest performance. This is potentially due to the heterogeneous nature of their colonies, which are often transparent and flat, possess irregular shapes, and tend to aggregate closely with other colonies. These characteristics, visible in Figure \ref{fig:pseudo} a), make them challenging for the model to discern accurately.
+The vague subset similarly exhibited suboptimal performance. The authors characterise this subset as comprising images captured under existing ambient lighting conditions, resulting in low-contrast images that proved challenging to annotate even for a skilled microbiologist. Additionally, the distribution of classes within this subset is imbalanced, as depicted in Figure \ref{fig:hists_back}, further contributing to less effective model performance.
+
+However, retraining the models using these two underperforming subsets yielded promising results. The transfer of knowledge from the model trained on the complete dataset proved highly beneficial. Fine-tuning models using the weights of that comprehensive model significantly enhanced performance, particularly for the bright subset and the detection of \textit{P. aeruginosa}, leading to a great increase of 14 percentage points. 
+
+The ensemble method also significantly enhanced overall performance across all subsets, with notable improvements once again observed in the bright subset, particularly in the detection of \textit{P. aeruginosa}. It is worth emphasising that this ensemble approach is not entirely independent of the transfer learning technique, as it leverages the results from those retrained models. While various combinations were experimented with, the inclusion of the RetinaNet models, despite their lower performances, proved beneficial to the ensemble's final performance. Their inclusion was essential in achieving the elevated results presented. \newline
+
+
+
+
+
+The dataset for the second part of this project was generated using agar plates from the microbiology laboratory at my institute. Bacterial cultures were inoculated onto agar plates containing various types of culture media. It is crucial to note that the inoculation process for this dataset did not adhere to the standardised protocols typically used in the clinical setting. Instead, it was designed to produce well-separated colonies for this project. In clinical routine, colonies from real patient samples are inoculated using specific techniques that vary depending on the sample type. To maximise the visibility and facilitate the identification of pathogenic microorganisms, colonies in real samples often grow in high numbers and need to be better separated. Following the real clinical protocols for inoculation was not feasible for the annotation process in this project due to the high colony density. Many colonies would not be individually discernible in such cases, making the annotation and model training very challenging.
+
+After the inoculation and incubation of the plates, images were captured. To enhance contrast between colonies and the background, a deliberate effort was made to take photographs with darker background settings. This was particularly important for agar plates containing MacConkey and Mannitol culture media, as they are transparent and allow the background colour to be visible. However, it is essential to mention that lighting conditions could not be standardised, and there was no designated photography area. Despite efforts to minimise them, some images may contain reflections.
+
+
+
+With this dataset, RetinaNet with a ResNet 50 backbone emerged as the top-performing model, in contrast to the first part, where Faster R-CNN with ResNet 101 was superior. However, the performance difference between models was relatively small, with RetinaNet outperforming the lowest-performing model by only about 4.5 percentage points.
+
+Similar to the first part, the classification of \textit{P. aeruginosa} proved to be the most challenging for the models. This difficulty can be attributed to the specific morphology of these colonies. Additionally, both \textit{S. aureus} and \textit{E. coli} exhibit distinct characteristics in certain culture media. For instance, \textit{S. aureus} colonies had a rounded shape and a goldish colour, which caused the background around them to turn yellow in Mannitol agar. \textit{E. coli} colonies displayed a distinctive purple colour in MacConkey agar, making them stand out compared to \textit{P. aeruginosa}. In contrast, \textit{P. aeruginosa} colonies typically had a flat, irregular shape, were transparent, and often had a colour similar to the background. They also reflect some light, sometimes having a shiny appearance, which makes them more challenging to detect.
+
+Various training processes were applied, including different pre-processing and augmentation techniques. However, the best results were achieved with a training process that did not involve pre-processing or augmentations of the images. This dataset is relatively small, consisting of only 165 images, and exhibits considerable variability in background colours and colony morphology. Augmentations may have introduced additional variability, potentially obscuring patterns the models needed to learn.
+
+
+
+The process of generalisation, tested by fine-tuning a model trained on the second dataset using weights previously trained on the entire \ac{agar} dataset, had a small impact on performance. This can be attributed to the substantial differences between the two datasets. While they share the same bacterial classes, they represent them differently. The images in the \ac{agar} dataset have significantly higher resolutions and exhibit consistent inoculation culture media, resulting in uniform colony morphology. In contrast, the new dataset features a lower resolution and is considerably smaller. Additionally, it encompasses a much wider diversity in terms of background colours and colony characteristics.
+
+
+To conclude, the \ac{wbf} method is a crucial asset in improving model performance. It delivers a substantial average increase of 4 percentage points across all metric aspects, signifying a notable enhancement in performance. Similar to the first part, combining results from all trained models, including those from transfer learning, proved to be the most effective approach in achieving the best results. \newline
+
+
+
+
+
+
+
+While not providing a comprehensive explanation, some examples of errors made by the models in the dataset are presented in Figure \ref{fig:erros}. These include, as suspected, false identification of light reflections (Figure \ref{fig:erros} d), as well as artifacts on the media (Figure \ref{fig:erros} b) being misclassified as colonies, failures to recognise colonies when they are nearby or form a mesh (Figure \ref{fig:erros} a and c) (although this can also be challenging for a human annotator at times), as well as some misclassifications of colonies if they have a different morphology than the others. As previously mentioned, better classification tends to occur for colonies with more distinctive characteristics, such as the purple \textit{E. coli} and golden \textit{S. aureus}.
+
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\linewidth]{images/erros.PNG}
+    \caption{Some examples of classification errors.}
+    \label{fig:erros}
+\end{figure}
+
+Interestingly, there are no significant differences in performance when using different object detection models. The models employed in this study vary in depth and the overall architecture of the neural networks, but they all exhibit fairly similar performance on the datasets. However, it is important to note that while the overall performance may be similar, it does not necessarily mean that the models rely on the same image features for classification. 
+
+
+Ensembling proved to be a valuable approach for improving the baseline models. However, achieving these improvements required training multiple models and applying transfer learning and model retraining. These are two techniques for enhancing performance: the training process and the transfer of knowledge from one model to another, and the ensemble method involving the aggregation of knowledge from the results of previously trained models during the inference process. In addition to performance improvements, these techniques also have implications for their task type. In the context of this dissertation, achieving better performance was prioritised over faster inference speed. This is because the incubation periods in a laboratory setting are typically hours long, and real-time identification and classification of colonies are not a strict requirement. While training multiple models can be time-consuming, ensembling the inference results of various models is a feasible and effective way to achieve superior results, even if it comes at the cost of some inference speed.
+
+The ensemble method tested in this project involved combining the various results and fusing them based on probability scores and weights to formulate average boxes. However, other approaches to ensembling could be considered, such as applying ensemble techniques during the training process, where multiple models and parameters are combined. This approach can lead to even better results but may require significantly more computational power. \newline
+
+%%%
+
+This study represents the first instance of utilising a dataset encompassing various culture media, consequently incorporating distinct morphological characteristics within the same species. Furthermore, this study is also the first in its approach to encompass the training of two distinct datasets to enhance the performance of the second dataset, as well as in the utilisation of \ac{wbf} ensemble, specifically within the domain of colony detection and classification. \newline
+
+%There is limited existing literature in colony classification and object detection. One notable contribution is, of course, the work by \cite{agar}, who introduced the \ac{agar} dataset \citep{agar-cnn, agardensitymap}. They also extended their research by generating synthetic microbial colonies dataset through style transfer techniques \citep{agarsynthetic}. Another relevant study by \cite{hemolysis} applied deep learning methods to images of colonies on culture plates, focusing on detecting hemolysis around certain colonies.
+
+
+However, this project has several limitations that should be acknowledged. First, the created dataset needs further improvement regarding the number of images and their quality. Establishing designated areas with better lighting conditions would be beneficial to avoid artifacts in the images. Additionally, using better camera settings, such as standardised vertical distance to the plates, avoiding angles, and capturing higher resolution images, could enhance the dataset's quality. Moreover, exploring more advanced approaches for object detection on high-resolution images can be advantageous.
+
+
+
+Another limitation is that this project's inoculation process differs from the clinical setting. Future work should focus on developing models that closely mimic the conditions encountered in clinical microbiology laboratories. However, it is worth noting that the trained models perform reasonably well on real examples of microbiology analysis, effectively detecting and classifying individualised colonies (Figure \ref{fig:real}). Additionally, since the annotation process for this task is labour-intensive, these models can serve as valuable tools to assist in the annotation process.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.7\linewidth]{images/realset.PNG}
+    \caption{Inference on a plate from the work routine.}
+    \label{fig:real}
+\end{figure}
+
+
+Furthermore, other models can be trained for this task as part of future work. For instance, Mask R-CNN, commonly used for segmentation tasks instead of bounding boxes, may be beneficial for detecting colonies with irregular shapes, such as \textit{P. aeruginosa}. Other models like the one-stage \ac{yolo} family, which are currently achieving impressive performance benchmarks with newer versions like YOLOv8 \citep{yolov8_ultralytics}, YOLO-NAS \citep{yolo-nas}, and others, could also be explored. Additionally, more complex pre-processing techniques and advanced ensemble models can be tested further to improve the performance of colony detection and classification. \newline
+
+
+
+
+
+In conclusion, this project successfully achieved all of its proposed objectives. It significantly improved the performance of models on the \ac{agar} dataset through various techniques. Creating a dataset with unique characteristics encompassing diverse culture media, is unprecedented to the best of my knowledge. Moreover, this work explored the generalisation of models and provided valuable insights into the suitability of different models and techniques for various tasks. 
+
+Ultimately, this project is now part of a journey towards developing tools that will contribute to advancing the medical and health field. \newline
+
+
+
+
+

@@ -1,0 +1,41 @@
+# =============================================================================
+# Requirements for Microbial Colony Detection Project
+# Pin versions for reproducibility (Scientific Reports revision)
+# Environment: Google Colab (Ubuntu 22.04, CUDA 11.8)
+# =============================================================================
+
+# --- Core ---
+torch>=1.13.0,<2.2.0
+torchvision>=0.14.0,<0.17.0
+
+# --- Detectron2 (install via: python -m pip install 'git+https://github.com/facebookresearch/detectron2.git') ---
+# detectron2  # installed from source; see 1_setup.ipynb
+
+# --- COCO evaluation ---
+pycocotools>=2.0.7
+
+# --- YOLOv8 baseline (reviewer requirement) ---
+ultralytics>=8.0.0,<8.3.0
+
+# --- Data & computation ---
+numpy>=1.23.0,<2.0.0
+scipy>=1.10.0
+pandas>=1.5.0
+scikit-learn>=1.2.0
+
+# --- Visualization ---
+matplotlib>=3.6.0
+seaborn>=0.12.0
+opencv-python-headless>=4.7.0
+
+# --- Experiment tracking ---
+tensorboard>=2.12.0
+
+# --- Utilities ---
+Pillow>=9.4.0
+tqdm>=4.64.0
+PyYAML>=6.0
+
+# --- Google Colab specific ---
+# google-colab  # pre-installed in Colab
+# gdown  # pre-installed in Colab

@@ -1,0 +1,259 @@
+\chapter{\textbf{Literature Review}}  \label{literature}
+
+This section will present an overview of the existing literature on \ac{dl}. Additionally, a theoretical approach to the predominant object detection models will be exposed, including two-stage detectors, like, for example, Region \ac{cnn}, as well as one-stage models, such as dense (RetinaNet, \ac{yolo} and OverFeat), or sparse models (Sparse R-CNN and Deformable \ac{detr}). This first segment will be followed by an in-depth review of the current applications of \ac{dl} and object detection models in medical image analysis, specifically, the existing work on their use within the microbiology setting. 
+
+\section{Deep Learning}
+\ac{dl} is currently considered a subset within \ac{ml}, which consists of artificial neural networks composed of three or more layers developed to replicate the behaviour of neurons of the human brain. 
+These multiple hidden layers are made up of interconnected nodes placed between the input and output layers.
+Each layer represents different levels of abstraction. In summary, the model may start with the raw data, that is, the input, and each layer will apply and learn some non-linear function that will transform this representation to an increasingly abstract level \citep{deeplearning}. This is the primary differentiating factor between classic \ac{ml} and \ac{dl}. While \ac{ml} requires a manual engineering process and feature extraction to transform the raw data, \ac{dl} can learn directly from raw input, automating much of the feature extraction process through a general-purpose learning method \citep{deeplearning}.
+The neural networks combine data inputs, weight, error, and bias to become accurate. Each layer can be built upon the previous layer so it can learn some aspects and be refined, and it can also be tuned through backpropagation. In this case, errors are calculated, and the weight and biases may be adjusted by returning to previous layers \citep{deeplearning}.
+
+There are, however, various types of deep neural networks, from \ac{cnn}, Recurrent Neural Networks, etc. CNN is the most commonly used architecture in computer vision and image classification. When applied to visual recognition and classification, CNN has developed state-of-the-art performance \citep{CNN-rawat, CNN-ImageNet}.
+
+\section{Convolutional Neural Networks}
+As already mentioned, \ac{cnn} have been considered the state-of-the-art for computer vision and image processing problems, such as image classification and segmentation, object detection, and video processing \citep{CNN-survey-khan}. These neural networks have been applied for visual exercises since the late 1980s \citep{CNN-rawat}. However, it was not until \cite{CNN-ImageNet} won a Visual Recognition Competition by classifying around 1.2 million images into 1000 classes that \ac{cnn} started dominating the visual classification field \citep{CNN-rawat, CNN-survey-khan}.
+
+%\subsection{Basic Principles}
+\ac{cnn} are feedforward networks and, just like the typical artificial neural networks, were biologically inspired by the visual cortex in brains, which are composed of alternating layers of simple and complex layers of cells \citep{CNN-rawat}.
+The basic architecture of a \ac{cnn}, proposed by \cite{deeplearning}, consists of three different types of layers and is structured as a series of stages. These layers are convolutional, pooling or subsampling, and fully-connected layers \citep{cnn-recentadvances-gu}. Figure \ref{fig:cnn} shows a representation of a CNN pipeline.
+
+\begin{flushleft}
+\emph{Convolutional Layers}
+\end{flushleft}
+
+The convolutional layer is the main component of a \ac{cnn}, and its main objective is to detect local groups of features from previous layers. The input is presented in multiple arrays containing pixel intensities when the input is an image. With this information, a convolutional layer will try to learn feature representations from the input, applying several convolution operations, or kernels, upon the input \citep{deeplearning}. In a convolutional layer, units are organized into feature maps. Each unit is connected to small regions in the feature maps of the preceding layer through a set of weights \citep{deeplearning}. The different kernels within each layer will then be used to compute different feature maps, and the result of the locally weighted sum will be passed through non-linear functions \citep{deeplearning, cnn-recentadvances-gu}. The kernel is applied to various submatrices of the input iteratively. The size of the kernel and the number of positions that should be shifted after each iteration are all parameterized. All this process will promote the detection of interesting features on the input, with local
+groups of values that are easily detected and distinctive because they are often highly correlated. It will also grant invariance to location and increase efficiency while reducing the number of parameters with a weight-sharing mechanism, granting that a local motive can appear anywhere within the full image \citep{guo-cnn-dl_for_visual_review, deeplearning}.
+
+\begin{flushleft}
+\emph{Pooling Layers}
+\end{flushleft}
+
+The pooling layers, generally placed between two convolutional layers, operate by grouping similar features into one, reducing the dimensions of feature maps and network parameters. This provides them with the ability to achieve spatial invariance because their
+computations consider neighbouring pixels, decreasing overfitting, and decreasing further computational requirements \citep{deeplearning, CNN-survey-khan, CNN-rawat, cnn-recentadvances-gu}.
+There are various ways that the layers can achieve this. The most common methods are average pooling and max pooling aggregation layers. Max pooling is often used to extract the most intense features, like edges, while average pooling works with a smoother approach \citep{pooling-cnn}. There are, however, more types of pooling layers, depending on the final task, such as the overlapping, spatial pyramid, and stochastic pooling \citep{cnn-recentadvances-gu, guo-cnn-dl_for_visual_review}
+
+\begin{flushleft}
+\emph{Fully-Connected Layers}
+\end{flushleft}
+
+Several stages of convolution, non-linearity, and pooling
+layers are stacked to extract more abstract feature
+representations throughout the network, followed by one or more fully connected layers \citep{deeplearning, CNN-rawat}.
+These layers connect all the neurons on the previous layer to process global information. They behave like a traditional neural network, containing the majority of the parameters of a \ac{cnn}. They can feed forward the network into a vector that will then be forwarded for image classification or processing \citep{guo-cnn-dl_for_visual_review}.
+For classification problems, the softmax operator is commonly used. However, depending on the final objective, it is possible to use different methods, such as \ac{svm} combined with \ac{cnn} \citep{CNN-rawat}.
+The fully connected layers require big computational power during training, thus being considered a disadvantage of this architecture \citep{guo-cnn-dl_for_visual_review}.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{images/cnn.png}
+    \caption{CNN pipeline}
+    \label{fig:cnn}
+\end{figure}
+
+\begin{flushleft}
+\emph{Activation Function}
+\end{flushleft}
+
+The activation function can learn multiple patterns. Here, the output of a convolution is multiplied by the activation function, which adds non-linearity and creates a transformed output \citep{CNN-survey-khan}. Typical activation functions are the sigmoid, tanh, and rectified linear units (ReLU). The last one is the most common today, having fast convergence and not suffering from the vanishing gradient problem. However, several variations of this function exist that try to achieve faster and better performance. Some examples are Leaky, Parametric, Randomized ReLU, and Exponential Linear Unit \citep{CNN-rawat}.
+
+\begin{flushleft}
+\emph{Training}
+\end{flushleft}
+
+Training the network consists of a global optimization problem. Similar to a classical neural network, it is performed with a backpropagation algorithm by calculating the gradient vector of a loss function according to weights and biases, with further adjustment of parameters \citep{CNN-rawat}.
+
+
+
+\section{Object Detection and Recognition}
+
+As referred before, the rise in popularity and success of CNN came after the work of \cite{CNN-ImageNet} on the ImageNet Large Scale Visual Recognition Challenge (ILSVRC), when millions of labelled images were used to train a large CNN. Similarly to the ILSVRC, the PASCAL Visual Object Classes (VOC) challenge is a benchmark in visual object category recognition and detection \citep{PASCAL-VOC}.
+Object detection requires the solution of two main tasks: recognition, and localization. First, the detector needs to distinguish objects from the background and classify them, and second, it needs to locate and draw bounding boxes to each object \citep{Sparse-rcnn}.
+
+While image classification aims to classify full images in categories (for example, correctly classifying pictures of cats and dogs), visual recognition tries to answer slightly different questions, as such:
+\begin{itemize}
+  \item Classification - Identify if an object is present in an image;
+  \item Detection - Locate the object in the image;
+  \item Pixel-level Segmentation - Each pixel is assigned a class label;
+  \item Person layout - Identify the location of body parts in an image (as a practical example)
+\end{itemize}
+\citep{PASCAL-VOC}
+
+The former object detection approaches did not rely on \ac{cnn} \citep{RCNN}. Some first approaches were based on Histograms of Oriented Gradients \citep{HOG} and Distinctive Image Features from Scale-Invariant \citep{SIFT} \citep{dl-object}. Over the years, several studies applied \ac{cnn} for these tasks. However, their accuracy on small datasets, while decent, was not record-breaking. Many authors proposed \ac{cnn} with a sliding window over multiple scales; some researchers have suggested training CNNs to directly predict the specific parameters of objects that need to be located, such as their position relative to the viewing window or their pose; other authors have proposed to use CNN-based segmentation for object localization, with the simplest approach being to train the CNN to classify the central pixel of its viewing window as a boundary or not. However, this approach required dense pixel-level labels for training \citep{overfeat}.
+
+Larger datasets, such as the well-known ImageNet, have enabled CNN to significantly develop the state of the art on object detection and recognition \citep{overfeat, RCNN}. 
+The work of \cite{overfeat} was then the first to publish a clear explanation of how CNN can be used for localization and detecting ImageNet data. In their work, they provided some new insight into their competition-winning framework:
+
+\begin{itemize}
+  \item Implementing a multi-scale and sliding window approach within a CNN efficiently;
+  \item Presenting a new \ac{dl} approach for localization by training the model to predict object boundaries;
+  \item Demonstrating that multiple tasks can be learned simultaneously using a single shared network;
+  \item Publishing a feature extractor called OverFeat derived from their best model.
+\end{itemize}
+
+A short time after, \cite{RCNN} published a paper that proposed a new algorithm with higher precision than the previous best result on VOC 2012 and better results than the work of \cite{overfeat}.
+They called their method R-CNN, as in "Regions with CNN features" \citep{RCNN}. Their approach consisted of a combination of two key elements:
+
+\begin{itemize}
+  \item The use of high-capacity CNNs on bottom-up region proposals for object localization and segmentation;
+  \item Using supervised pre-training for an auxiliary task, followed by fine-tuning for a specific domain, resulted in a significant performance improvement when labelled training data is scarce.
+\end{itemize}
+
+In this section, a summary of the evolution of object detection algorithms over the last few years will be presented. The different approaches to these tasks will be described, from the dense, dense-to-sparse, and sparse methods, as well as some examples of algorithms within each method. The description and focus on the application of CNN for this task and how R-CNN became a solid base with lots of development in the last few years.
+
+\subsection{Dense Method}
+As previously mentioned, one approach to object detection is using sliding windows over scales. This method was popular for some years, but its performance reached a limit due to the limitations of traditional feature extraction techniques \citep{Sparse-rcnn}. With the advent of CNNs in this field, performance improved. The most common pipelines consisted of one-stage detectors that relied on dense candidates, each directly classified and regressed. 
+These pipelines have some drawbacks, such as the production of redundant results and the requirement for non-maximum suppression post-processing. The final performance was also highly affected by the size, aspect ratio, number of anchor boxes, the density of reference points, and proposal generation algorithms \citep{Sparse-rcnn}.
+
+OverFeat, \ac{yolo} and RetinaNet are examples of dense methods.
+
+\begin{flushleft}
+\emph{Overfeat}
+\end{flushleft}
+
+\cite{overfeat} developed a multi-scale, sliding window approach that can be used for classification, localization, and detection. The authors proposed a CNN trained to simultaneously classify, locate, and detect objects in images to improve classification, localization, and detection accuracy. In their work, \cite{overfeat} introduced a new method that accumulates predicted bounding boxes instead of suppressing them, claiming that detection can be performed without training on background samples, avoiding complicated and time-consuming bootstrapping training methods, while increasing detection confidence \citep{overfeat}.
+A new state of the art for the detection task was defined. Finally, \cite{overfeat} released a feature extractor of the best model called OverFeat. 
+This was one of the first modern one-stage object detectors based on deep networks \citep{retinanet}.
+
+\begin{flushleft}
+\emph{RetinaNet}
+\end{flushleft}
+
+The work of \cite{retinanet} focused on developing a single-stage model that would be as accurate as the two-stage detectors that defined the state of the art at the time. For this, the authors identified the main obstacle of one-stage detectors as the class imbalance present during training. They proposed a different loss function that would tackle this issue.
+A new loss function called Focal Loss was introduced, addressing the issue of class imbalance. The loss function dynamically scales the cross-entropy loss, reducing the impact of easy examples and emphasizing hard examples during training. This outperformed previous techniques, such as sampling heuristics and hard example mining for training one-stage detectors.
+The specific form of the focal loss is not critical, as alternative instantiations yield similar results. To demonstrate its effectiveness, the authors presented RetinaNet, a one-stage object detector that utilizes focal loss along with an efficient pyramid of features in the network and anchor boxes, achieving high accuracy and surpassing the results of both one- and two-stage detectors \citep{retinanet}.
+RetinaNet constitutes an integrated neural network architecture comprising a backbone network and two specialized subnetworks. The backbone produces a convolutional feature map encompassing the entire input image based on the Feature Pyramid Network. The first subnetwork focuses on object classification, while the second is responsible for performing bounding box regression for their prediction. These subnetworks are specifically optimized for efficient and comprehensive object detection in a single stage. 
+
+
+
+\begin{flushleft}
+\emph{YOLO}
+\end{flushleft}
+
+\cite{yolo} approached the object detection task as a single regression problem, directly predicting the image pixels' bounding box coordinates and class probabilities. It uses a single CNN that simultaneously predicts multiple bounding boxes and class probabilities for those boxes, trained on full images and directly optimizing detection performance \citep{yolo}. Unlike sliding window and region proposal-based techniques, \ac{yolo} sees the entire image during training and encodes contextual information about classes and their appearance. 
+Initially, \ac{yolo} lacked accuracy but represented a fast object detection algorithm.
+
+This method suffered several improvements over time.
+The main improvements on \ac{yolo} network were the addition of several layers and steps. The original framework added a base grid division; in future models, an anchor with K-means was added, along with a two-stage training and full CNN, as well as the addition of a multi-scale detection \citep{yolo-review}.
+
+
+\subsection{Dense-to-Sparse Method}
+Dense-to-sparse methods are two-stage detectors that have dominated object detection tasks for years. The process begins by identifying a small (sparse) number of boxes that likely contain foreground objects from a larger (dense) set of potential regions and then improves the placement of these boxes to locate the objects more accurately. They have a region proposal algorithm \citep{RCNN, Faster-R-CNN:TowardsReal-TimeObject}, and as well as dense methods, also need non-maximum suppression post-processing \citep{Sparse-rcnn}.
+
+%\subsubsection{R-CNN}
+The main approach of \cite{RCNN} was trying to fill the gap between image classification and object detection. 
+Object detection requires the localization of likely many objects within an image, unlike image classification \citep{RCNN}. 
+For their work, they considered taking localization task as a regression problem, but other authors already stated its inefficiency or adopting a sliding window approach. However, this would be a technical challenge due to having more convolutional layers \citep{RCNN}. 
+They instead approached the task with regional proposals.
+The algorithm consists of three modules:
+
+\begin{enumerate}
+  \item Generating a set of potential region proposals that will define candidate detections available for the detector;
+  \item Fixed-length feature extraction from these regions, using a large CNN;
+  \item A set of class-specific linear \ac{svm} to classify and locate the objects within the region.
+\end{enumerate}
+
+With this, several studies came after that tried to develop R-CNN for object detection, with better performance and higher speeds.
+\cite{fast-rcnn} denotes some drawbacks from the baseline R-CNN, such as being slow due to performing a CNN forward pass for each object proposal without sharing computation, thus training to become computationally expensive and having a greedy proposal search.
+
+\paragraph{R-CNN development}\mbox{} \\
+
+With the publication of the first R-CNN article, several authors followed by developing new methods upon the baseline algorithm to increase performance and speed and to tackle the bigger drawbacks. This topic presented a summary of each advancement and development that was made until the present day.
+
+\begin{flushleft}
+\emph{Fast R-CNN}
+\end{flushleft}
+
+Fast R-CNN brought some advantages compared to the baseline R-CNN. With higher detection quality, less computation is required than in single-stage training. The Fast R-CNN network inputs an entire image and a set of object proposals as input. Firstly, the whole image is processed with several layers, and then, a fixed-length feature vector is extracted from the feature map by a region of interest pooling layer.
+Each feature vector is fed into a sequence of fully connected layers that will branch into two output layers, one producing softmax probability estimates over determinate object classes and another layer that outputs four real-valued numbers for each of the object classes that will serve to encode refined bounding-box positions for one of the various classes \citep{fast-rcnn}. 
+One of the main advantages of Fast R-CNN is that it uses a single-stage training process and can achieve almost real-time rates when not considering the time required for proposal generation \citep{Faster-R-CNN:TowardsReal-TimeObject}.
+
+\begin{flushleft}
+\emph{Faster R-CNN}
+\end{flushleft}
+
+The work of \cite{Faster-R-CNN:TowardsReal-TimeObject} introduced the Region Proposal Network (RPN) as an addition to the Fast R-CNN object detection algorithm. The RPN is a fully convolutional network that predicts object bounds and scores at each position while sharing full-image convolutional features with the detection network. This allows for cost-effective region proposals and improves the accuracy of object detection. 
+The authors trained the RPN on the previous Fast R-CNN. They achieved state-of-the-art object accuracy on several datasets with a limited number of proposals \citep{Faster-R-CNN:TowardsReal-TimeObject}.
+
+\begin{flushleft}
+\emph{Mask R-CNN}
+\end{flushleft}
+
+With Mask R-CNN, the authors worked on Faster R-CNN to create a flexible framework for object instance segmentation. In this work, \cite{mask-rcnn} developed a method that detected objects while simultaneously generating a high-quality segmentation mask for each instance. They added a new branch to the network responsible for predicting a binary mask for each object instance, in addition to the existing branches for object detection and bounding box regression. This new approach improved the performance of object instance segmentation and outperformed all existing single-model tasks in this area \citep{mask-rcnn}.
+
+\begin{flushleft}
+\emph{Cascade R-CNN}
+\end{flushleft}
+
+\cite{cascade-rcnn} developed the Cascade R-CNN framework, an extension of the two-stage R-CNN framework for object detection. They addressed two issues with the traditional R-CNN frameworks: the Intersection over Union (IoU) threshold for defining negatives and positives and overfitting due to a lack of positive samples.  
+In summary, a low threshold will produce noisy detections, and an increasing threshold may degrade detection performance, and overfitting usually happens since there are exponentially vanishing positive samples. The Cascade R-CNN framework consists of a sequence of detectors trained with increasing IoU thresholds, which are more selective against close false positives. Additionally, the framework uses a sequential resampling technique to reduce overfitting by ensuring all detectors have an equivalent size set of positive examples \citep{cascade-rcnn}.
+
+\subsection{Sparse Method}
+While both previous methods relied upon dense object candidates, such as having a pre-determined number of anchor boxes on every grid of the image feature map as the first stage, sparse methods aim to eliminate those types of dense candidate designs. \cite{Sparse-rcnn} and \cite{deformable-detr} have developed full sparse object detection pipelines that fully removed the need for the hundreds of thousands of hand-designed object candidates, achieving exceptional performance and accuracy.
+
+\begin{flushleft}
+\emph{Sparse R-CNN}
+\end{flushleft}
+
+The authors \cite{Sparse-rcnn} proposed a new approach to the object detection task called Sparse R-CNN. They believe that the sparse property should exist in two places: sparse boxes, meaning that a small number of starting boxes is enough to predict every object in an image, and sparse features, meaning that the feature of each box does not need to interact with every other feature over the image.
+
+Their method aimed to eliminate the need for thousands of candidates by choosing object candidates with a fixed small set of learnable bounding boxes instead of predicted ones from the Region Proposal Network from Faster R-CNN. 
+They also introduced two new concepts that followed the sparse ideals: proposal feature, consisting of a high-dimension latent vector that is expected to encode rich instance characteristics and generate customized parameters for recognition, and proposal boxes, which are randomly initialized and optimized along with the other parameters in the network \citep{Sparse-rcnn}.
+Sparse R-CNN is a full sparse method in which the initial input is a sparse set of proposal boxes and features, altogether with the one-to-one dynamic instance interaction, eliminating the need for dense candidates and the global feature interaction in the pipeline \citep{Sparse-rcnn}.
+
+\begin{flushleft}
+\emph{Deformable DETR}
+\end{flushleft}
+
+\cite{detr-dense} proposed \ac{detr}, which aims to eliminate the need for hand-designed components in object detection tasks while maintaining high performance.  \ac{detr} combines CNN and Transformer encoder-decoders to replace hand-crafted rules. However, \ac{detr} had some issues, such as long training times, being slower than Faster R-CNN, and having low performance detecting small objects \citep{deformable-detr}.
+To address these issues, \cite{deformable-detr} proposed Deformable DETR, which combines the sparse sampling of deformable convolution with the relation modelling capability of Transformers. 
+A deformable attention module attends to a small set of sampling locations as a pre-filter for prominent key elements. It can be extended to multi-scale aggregation without requiring Feature Pyramidal Networks. 
+An iterative bounding box refinement mechanism was used to improve detection performance, as well as a two-stage Deformable DETR, where a variant of Deformable DETR generates the region proposals, and then fed into the decoder for iterative bounding box refinement \citep{deformable-detr}.
+
+
+%\section{Architectures}
+
+
+
+
+
+
+
+\section{Deep Learning in Medical Microbiology}
+
+In this section, the existing literature on this specific topic will be discussed. There are few studies regarding using \ac{dl} in microbiology, even less for colony detection and classification. 
+Some studies approached the issue by developing algorithms to classify the colonies, while others tried to create methods for colony counting. Other authors applied \ac{dl} methods for image generation of synthetic colonies and plates upon an existing dataset. Although not upon culture media colonies, some authors researched microscopic images of microorganisms as a means to enhance image recognition in the microbiology area.
+
+\cite{agar} developed a whole dataset on images of microbial cultures cultured on an agar plate. Named the \ac{agar}, this dataset comprises around 18 thousand photos of five different microorganisms. The main objective of the authors was to create and publish a dataset that would serve for the future development of \ac{ml} models for the microbiology field.
+
+\cite{agar} evaluated the performance of the \ac{agar} dataset for building \ac{dl} models for image-based microorganism recognition by testing two architectures for object detection (Faster R-CNN and Cascade R-CNN) with four different backbones (ResNet-50, ResNet-101, ResNeXt-101, and HRNet). They found that the \ac{agar} dataset can be used to build robust models and is well suited for real data collected in various acquisition setups. The best-performing model was the Cascade R-CNN with the HRNet backbone, with a counting error of 4.92~\% on the higher-resolution subset and 3.81~\% on the lower-resolution subset. For detection, the mean average precision (mAP) scores ranged from 49.3~\% to 59.4~\% for different detectors.
+
+On a different paper, \cite{agar-cnn} evaluated the performance of various object detection methods, that included Faster R-CNN, Cascade R-CNN, Libra R-CNN, CBNetv2, YOLOv4, EfficientDet-D2, and Deformable \ac{detr} with different backbones (ResNet-50, CSPDarknet53, EfficientNet-B2, and XCiT-T12) on the higher resolution subset of the \ac{agar} dataset. The authors found that the results did not vary greatly between the different architectures, with mAP values ranging from 49\% to 53\%. Regarding accuracy and speed, YOLOv4 performed the best, while two-stage architectures performed moderately. Transformer-based architectures achieved the worst results.
+
+\cite{agarsynthetic} developed a strategy to generate an annotated synthetic dataset of microbiological images of Petri dishes using the \ac{agar} dataset. This dataset can train \ac{dl} models in a fully supervised fashion, utilizing traditional computer vision methods and neural style transfer techniques.
+
+\cite{agardensitymap} also used the \ac{agar} dataset to study a density map approach for colony counting. They proposed a self-normalization module in the network called a Self-Normalized Density Map, which improves the model's accuracy by correcting the output density map. However, the efficiency of this approach was similar to that of detector-based models such as Faster R-CNN and Cascade R-CNN.
+
+\cite{hemolysis-counting} have also created a dataset of pictures of blood agar plates with hemolytic and non-hemolytic colonies taken under different lighting conditions. The team then used this dataset to test two different \ac{ml} methods for counting colonies. The first method involved extracting a set of hand-crafted morphometric and radiometric features and using them in a \ac{svm}. The second method involved using a CNN. The team also tested different ways of enhancing the dataset to improve performance. They found that the CNN approach performed better than the hand-crafted method.
+
+\cite{hemolysis} developed a method to detect and classify diagnostically relevant hemolysis effects associated with specific bacteria growing on blood agar plates. The authors used feature evaluation and \ac{svm} classification to detect and distinguish between different types of hemolysis on both a single colony and whole plate setups. They reported good results but highlighted that different lighting conditions and plate alignment were major challenges for hemolysis detection.
+
+
+In the study conducted by \cite{deepbacteriasegm}, colony classification was approached using unsupervised methods. The goal was to segment and classify bacterial images across different growth phases and environmental contexts. The authors employed Convolutional Deep Belief Networks to provide a deep representation of small image patches. Afterwards, a \ac{svm} was trained to classify foreground and background patches accurately. Once the foreground patches were identified, a supervised CNN was trained to predict which bacterial colonies from the pool occurred in a query image. These predictions were then aggregated through a voting scheme to predict the likely species in the image. As a result of this study, the authors concluded that this method outperformed the more commonly used image segmentation and classification methods.
+
+\cite{colonycount} and \cite{micro-colony-count-yolo} explored various methods for colony counting to improve the task.
+
+In their study, \cite{colonycount} aimed to address the problem of limited labelled data and poor performance on new data sources in the colony counting task. They proposed a blending-based augmentation strategy to increase the amount of data and incorporate multiple targets within a single sample to enhance learning complexity. They used a two-stage framework, where data from multiple sources was first processed through a CNN for feature extraction and then trained in a second stage. The authors found that their approach outperformed other methods, such as OpenCFU, TLCC, Mask R-CNN, and CenterNet, due to the novel augmentation technique.
+
+\cite{micro-colony-count-yolo} created and evaluated several \ac{dl} models for automatic microbial colony counting using the \ac{yolo} framework, specifically using images of \emph{S. aureus} from the \ac{agar} dataset. They compared different versions of the YOLOV5 model and evaluated the effect of varying image resolutions. They found that more complex models did not improve performance significantly but significantly increased the time required for training.
+
+\cite{Image-generation-GAN} addressed the challenge of limited data availability by developing image-generation models. They used a CNN to separate colonies from backgrounds and to overcome the lack of annotated images. They designed a generative adversarial network to generate synthetic data that captures the typical distribution of bacterial colonies on agar plates. They then superimposed these generated colony patches on existing background images, considering the background's local appearance and the colonies' opacity. They used a style transfer algorithm to improve visual realism.
+
+Different from the focus on colonies on culture media, the studies by \cite{MicroscopyBactDL} and \cite{microscopy-dl-approach} used \ac{dl} techniques on digital microscopy images.
+
+\cite{microscopy-dl-approach} created the \ac{dibas} dataset, a collection of microscopic images that includes 33 different bacteria species, each represented by 20 images. These samples were stained using the Gram method and captured with a 100x objective under oil immersion. They then applied Dense SIFT and CNN techniques to classify bacteria species using this dataset.
+
+\cite{MicroscopyBactDL} applied a pre-trained ResNet-50 CNN architecture to classify digital bacteria images into 33 categories using the \ac{dibas} dataset. They used a transfer learning technique to speed up the training process of the network and enhance its classification performance. The proposed method achieved an average classification accuracy of 99.2~\%. \newline
+
+This dissertation seeks to advance the application of neural networks for the classification of bacterial colonies through various approaches. These approaches include improving the models' performance on the \ac{agar} dataset by employing techniques like transfer learning and ensemble methods. Additionally, the dissertation aims to gain a deeper understanding of how different background types impact model performance. This is accomplished by dividing the dataset into subsets based on background characteristics and training the models accordingly.
+
+Secondly, this project includes the creation of a small dataset consisting of annotated images of agar plates with bacterial colonies, encompassing a diversity of culture media. Existing datasets primarily focus on a single type of culture media. For instance, the \ac{agar} dataset features plates with \ac{tsa}, while the dataset in \cite{hemolysis} centers on colonies inoculated on plates with blood Agar. As such, this project aims to curate a dataset that encompasses plates with a diverse array of culture media, including blood agar, chocolate agar, MacConkey agar, and Mannitol agar. Besides its creation, the main objective is to utilize this dataset for training and subsequently enhancing the performance of the models. This enhancement will be achieved through the application of the aforementioned methods, including transfer learning and ensemble techniques.

@@ -1,0 +1,222 @@
+\documentclass[12pt,a4paper,twoside] {report}
+
+
+\usepackage{listings}
+
+\lstset{%
+    basicstyle=\ttfamily\footnotesize,
+    commentstyle=\color{gray},
+    keywordstyle=\color{blue},
+    stringstyle=\color{red},
+    tabsize=2,
+    showstringspaces=false,
+    breaklines=true,
+    frame=single,
+    captionpos=b,
+    aboveskip=10pt,
+    belowskip=10pt
+}
+
+\usepackage{amsmath}
+\setcounter{tocdepth}{3}
+\setcounter{secnumdepth}{3}
+
+\usepackage{siunitx}
+\usepackage[utf8]{inputenc}
+\usepackage [top=3cm, bottom=3cm, left=35mm, right=25mm] {geometry}
+
+\usepackage{soul}
+\usepackage{tabularx}
+\usepackage{booktabs}
+
+\usepackage{adjustbox}
+% Font style:
+\usepackage{fontspec}
+\setromanfont[
+BoldFont=GARABD.ttf,
+ItalicFont=GARAIT.ttf,
+BoldItalicFont=GARA.ttf,
+]{GARA.ttf}
+
+\setsansfont[
+BoldFont=GARABD.ttf,
+ItalicFont=GARAIT.ttf,
+BoldItalicFont=GARA.ttf,
+]{GARA.ttf}
+
+\setmonofont[Scale=1,
+BoldFont=GARABD.ttf,
+ItalicFont=GARAIT.ttf,
+BoldItalicFont=GARA.ttf,
+]{GARA.ttf}
+
+\usepackage{pdfpages}
+\usepackage{longtable}
+
+\usepackage[natbibapa]{apacite}
+
+\usepackage{acro}
+\input{Text/accronyms.tex}
+
+\usepackage{pgfgantt}
+
+%\usepackage[dvipsnames]{xcolor}
+
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{natbib}
+
+%\usepackage{graphicx}
+
+\usepackage{tikz}
+
+
+%\usepackage{graphicx} %package to manage images
+\graphicspath{ {./images/} }
+\usepackage[rightcaption]{sidecap}
+\usepackage{wrapfig}
+
+
+\usepackage{caption}
+\usepackage{subcaption}
+
+\usepackage{amsmath}
+
+\usepackage{lscape}
+
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+
+
+\usepackage{chngcntr}   
+\counterwithin{equation}{chapter}
+
+
+
+\usepackage[labelfont=bf]{caption}
+\captionsetup{labelfont=bf}
+
+\usepackage{graphicx}
+
+\usepackage[hidelinks]{hyperref}
+
+\usepackage{indentfirst}
+
+\title{Deep Learning in Medical Microbiology: \protect \linebreak For Microbial Colonies Classification}
+\author{José Duarte Pereira}
+\date{\today}
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%% BEGIN DOC %%%%%%%%%%%%%%%%%
+
+\pagenumbering{roman}
+\linespread{1.3}
+
+
+\begin{document}
+
+\include{FirstPage}
+
+%\input{FirstPage.tex}
+\thispagestyle{empty}
+
+\cleardoublepage
+\input{Text/Author}
+\addcontentsline{toc}{section}{Biographical note}
+
+\cleardoublepage
+\input{Text/Acknowledgements}
+\addcontentsline{toc}{section}{Acknowledgements}
+
+
+
+\cleardoublepage
+\input{Text/Abstract.tex}
+\addcontentsline{toc}{section}{Abstract}
+
+
+\cleardoublepage
+\input{Text/Resumo.tex}
+\addcontentsline{toc}{section}{Resumo}
+
+
+
+
+
+%\newpage
+%\input{Text/Glossary}
+
+\cleardoublepage
+\tableofcontents
+
+\cleardoublepage
+\listoffigures
+
+\cleardoublepage 
+\listoftables
+
+\cleardoublepage
+\printacronyms
+
+
+\cleardoublepage
+\pagenumbering{arabic}
+\input{Text/Introduction.tex}
+
+\cleardoublepage
+\input{Text/Literature Review.tex}
+
+\cleardoublepage
+\input{Text/Method.tex}
+
+\cleardoublepage
+\input{Text/Results.tex}
+
+\cleardoublepage
+\input{Text/Conclusion.tex}
+
+
+
+
+\cleardoublepage
+\addcontentsline{toc}{chapter}{Bibliography}
+\bibliographystyle{apacite}
+\bibliography{References.bib}
+
+\cleardoublepage
+\appendix
+\pagenumbering{roman}
+\input{Text/Appendix.tex}
+
+\end{document}
+
+
+
+%\newpage
+%\input{Text/Data.tex}
+
+%\newpage
+%\input{Text/diagram.tex}
+
+%\newpage
+%\input{Text/Business Understanding.tex}
+
+%\newpage
+%\input{Text/Data Understanding.tex}
+
+%\newpage
+%\input{Text/Data Preparation.tex}
+
+%\newpage
+%\input{Text/Modelling.tex}
+
+%\newpage
+%\input{Text/Evaluation.tex}
+
+%\newpage
+%\input{Text/Deployment.tex}

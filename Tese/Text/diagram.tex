@@ -1,0 +1,40 @@
+\chapter{\textbf{Gantt Diagram}}  \label{diagram}
+
+\begin{center}
+\begin{ganttchart}[
+    inline,
+    vgrid,
+    x unit=0.75cm,
+    y unit title=0.6cm,
+    y unit chart=0.6cm,
+    title label font=\bfseries\small,
+    title left shift=.05,
+    title right shift=-0.05,
+    title height=1,
+    bar label font=\small,
+    bar label node/.append style={left=1mm},
+    bar/.append style={draw=black,fill=gray!30},
+    bar height=.7,
+    group/.append style={draw=black, fill=gray!80},
+    time slot format=isodate-yearmonth,
+    time slot unit=month
+]{2022-10}{2023-7}
+\gantttitlecalendar{year, month} \\
+\ganttgroup[inline=false]{Writing Dissertation}{2022-10}{2023-07} \\
+\ganttgroup[
+    inline=false, 
+    progress=100,
+    group/.append style={draw=black, fill=green}
+    ]{Literature Review}{2022-10}{2023-01} \\
+ 
+\ganttnewline[thick, red, dashed] \\
+\ganttgroup[inline=false]{Methodology}{2023-02}{2023-05} \\
+
+\ganttbar[inline=false]{Data Preparation + Model Architecture Definition}{2023-02}{2023-02} \\
+\ganttbar[inline=false]{Train, Evaluate, Fine-tune Model}{2023-03}{2023-05} \\ \\
+\ganttgroup[inline=false]{Results and Conclusion}{2023-06}{2023-07} \\
+\ganttbar[inline=false]{Discussion of the results}{2023-06}{2023-06} \\
+\ganttbar[inline=false]{Conclusion and future work}{2023-07}{2023-07} \\
+
+\end{ganttchart}
+\end{center}
