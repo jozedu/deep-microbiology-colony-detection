@@ -42,3 +42,8 @@ Tese/*.TTF
 # Google Drive / Colab outputs (these live on Drive, not in git)
 outputs_detectron2/
 results/
+
+
+bright_100_faster_rcnn_R_50_FPN_3x_01-06-2023_08-21-12/
+
+reports/
